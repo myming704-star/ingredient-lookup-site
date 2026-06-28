@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>成分速查 ・ 保健食品、保養品與化妝品分析</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbf3e7;
+  --card:#fffcf5;
+  --ink:#4a3a28;
+  --muted:#9a8568;
+  --line:rgba(74,58,40,0.14);
+  --pink:#a9763a;
+  --pink-light:#e8d4ab;
+  --coral:#c1654a;
+  --purple:#8b7396;
+  --gold:#d4a83e;
+  --magenta:#93864f;
+  --sagegreen:#7a9b6e;
+  --font-display:'Poppins',sans-serif;
+  --font-body:'Noto Sans TC',sans-serif;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important;transition-duration:0.001ms !important;}
+}
+body{
+  margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);
+  line-height:1.7;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:680px;margin:0 auto;padding:36px 20px 60px;position:relative;}
+.hero-decor{position:absolute;pointer-events:none;opacity:.85;z-index:0;}
+.hd-sparkle{width:42px;top:2px;right:4px;}
+.hd-heart{width:26px;top:86px;left:-6px;}
+.hd-flower{width:30px;top:0;left:42%;}
+@media (prefers-reduced-motion: no-preference){
+  .hd-sparkle{animation:hd-float-a 9s ease-in-out infinite;}
+  .hd-heart{animation:hd-float-b 11s ease-in-out infinite;}
+  .hd-flower{animation:hd-float-c 8s ease-in-out infinite;}
+}
+@keyframes hd-float-a{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-8px) rotate(14deg);}}
+@keyframes hd-float-b{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(6px) rotate(-10deg);}}
+@keyframes hd-float-c{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+.eyebrow{font-family:var(--font-display);font-size:14px;letter-spacing:2px;color:var(--pink);text-transform:uppercase;}
+h1{
+  font-family:var(--font-display);font-weight:700;font-size:clamp(32px,6vw,44px);margin:8px 0 6px;
+  background:linear-gradient(100deg,var(--pink) 10%,var(--gold) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block;
+}
+.lede{color:var(--muted);font-size:17.5px;max-width:54ch;margin:0 0 8px;}
+.disclaimer-top{font-size:15px;color:var(--muted);background:rgba(169,118,58,0.08);border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin:18px 0 28px;}
+.history-wrap{margin-bottom:18px;}
+.history-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.history-label{font-family:var(--font-display);font-size:13px;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;margin:0;}
+.history-chip{background:rgba(154,133,104,0.14);color:var(--ink);}
+.history-chip:hover{background:rgba(154,133,104,0.26);}
+
+.allergy-panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 22px;margin-bottom:18px;}
+.allergy-summary{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+.allergy-summary-text{font-size:16.5px;color:var(--ink);font-weight:500;}
+.btn-link{background:none;border:none;color:var(--pink);font-family:var(--font-display);font-weight:600;font-size:16px;cursor:pointer;padding:4px 2px;}
+.btn-link:hover{text-decoration:underline;}
+.allergy-form{margin-top:16px;border-top:1px dashed var(--line);padding-top:16px;}
+.allergy-note{font-size:15px;color:var(--muted);background:rgba(193,101,74,0.06);border:1px solid rgba(193,101,74,0.18);border-radius:8px;padding:8px 12px;margin:0 0 16px;}
+.q-title{font-size:16.5px;font-weight:700;margin:18px 0 8px;color:var(--ink);}
+.q-title:first-of-type{margin-top:0;}
+.q-options{display:flex;flex-direction:column;gap:7px;}
+.q-options label{font-size:16px;color:var(--ink);display:flex;align-items:center;gap:8px;cursor:pointer;}
+.q-options input{accent-color:var(--pink);width:16px;height:16px;flex-shrink:0;}
+.allergy-result{margin-top:18px;background:rgba(169,118,58,0.06);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
+.allergy-result ul{margin:8px 0 12px;padding-left:20px;font-size:16px;}
+.allergy-result li{margin-bottom:7px;}
+#allergy-submit-btn{margin-top:6px;}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 6px 20px rgba(169,118,58,0.08);}
+.category-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+.cat-tab{
+  flex:1;min-width:96px;background:#fbfdfb;border:1.5px solid var(--line);border-radius:10px;
+  padding:10px 12px;font-family:var(--font-display);font-weight:600;font-size:15.5px;color:var(--muted);
+  cursor:pointer;transition:background .2s ease,color .2s ease,border-color .2s ease;text-align:center;
+}
+.cat-tab:hover{border-color:var(--pink-light);}
+.cat-tab.active{background:var(--pink);color:#fff;border-color:var(--pink);}
+.cat-badge{
+  background:rgba(255,255,255,0.18);color:#fff;border-radius:999px;padding:2px 10px;
+  font-size:12.5px;letter-spacing:.5px;margin-left:6px;text-transform:none;
+}
+.sub-tabs{display:flex;gap:16px;margin-bottom:18px;border-bottom:1px solid var(--line);}
+.sub-tab{
+  background:none;border:none;border-bottom:2px solid transparent;padding:6px 2px 10px;
+  font-family:var(--font-display);font-weight:600;font-size:16px;color:var(--muted);
+  cursor:pointer;margin-bottom:-1px;
+}
+.sub-tab.active{color:var(--pink);border-bottom-color:var(--pink);}
+.brand-info{margin-top:16px;background:#fffaf9;border:1px solid var(--line);border-radius:14px;padding:16px 18px;}
+.brand-tier{
+  display:inline-block;background:rgba(169,118,58,0.12);color:var(--pink);
+  font-family:var(--font-display);font-size:13px;letter-spacing:.5px;border-radius:999px;
+  padding:3px 10px;margin:0 0 8px;
+}
+.brand-desc{font-size:16.5px;color:var(--ink);margin:0 0 12px;}
+.brand-flagship-title{font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin:0 0 6px;}
+#brand-flagship-list{margin:0;padding-left:0;font-size:16px;list-style:none;}
+.flagship-item{display:flex;flex-direction:column;gap:5px;padding:10px 0;border-bottom:1px dashed var(--line);}
+.flagship-item:last-child{border-bottom:none;padding-bottom:0;}
+.flagship-item-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.flagship-item-name{font-size:16px;font-weight:600;color:var(--ink);}
+.flagship-item-price{font-family:var(--font-display);font-size:14.5px;color:var(--gold);font-weight:600;}
+.flagship-subcat{font-size:12px;background:rgba(139,115,150,0.12);color:var(--purple);border-radius:999px;padding:2px 9px;font-family:var(--font-display);}
+.flagship-reason{font-size:15px;color:var(--muted);line-height:1.55;margin:0;}
+.static-tag{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-display);font-size:12px;letter-spacing:.5px;color:var(--gold);background:rgba(212,168,62,0.12);border-radius:999px;padding:3px 10px;margin:0 0 10px;}
+.flagship-meta{font-size:13.5px;color:var(--muted);margin:3px 0 0;line-height:1.55;}
+.flagship-meta-label{font-weight:600;color:var(--ink);margin-right:4px;}
+.budget-item-subcat{font-size:12px;background:rgba(139,115,150,0.12);color:var(--purple);border-radius:999px;padding:2px 9px;font-family:var(--font-display);display:inline-block;margin-bottom:6px;}
+.live-tag{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-display);font-size:12px;letter-spacing:.5px;color:var(--sagegreen);background:rgba(122,155,110,0.12);border-radius:999px;padding:3px 10px;margin:0 0 10px;}
+.live-tag .dot{width:6px;height:6px;border-radius:50%;background:var(--sagegreen);}
+@media (prefers-reduced-motion: no-preference){
+  .live-tag .dot{animation:live-pulse 1.6s ease-in-out infinite;}
+}
+@keyframes live-pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+.live-stamp{font-size:13px;color:var(--muted);margin-top:10px;}
+.loading-box{display:flex;align-items:center;gap:10px;padding:18px 4px;color:var(--muted);font-size:15.5px;}
+.spinner{width:18px;height:18px;border-radius:50%;border:2.5px solid var(--line);border-top-color:var(--pink);flex-shrink:0;}
+@media (prefers-reduced-motion: no-preference){
+  .spinner{animation:spin .8s linear infinite;}
+}
+@media (prefers-reduced-motion: reduce){
+  .spinner{border-top-color:var(--muted);}
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.live-error{background:rgba(193,101,74,0.08);border:1px solid rgba(193,101,74,0.3);color:#9a3f26;border-radius:10px;padding:12px 14px;font-size:15.5px;}
+.live-error button{margin-top:8px;}
+.source-note{font-size:13px;color:var(--muted);margin-top:4px;}
+
+.adv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:18px;}
+.adv-field{display:flex;flex-direction:column;gap:6px;}
+.adv-label{font-family:var(--font-display);font-size:13.5px;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;}
+.adv-field select, .adv-field input{
+  border:1px solid var(--line);border-radius:10px;padding:9px 12px;
+  font-family:var(--font-body);font-size:16.5px;color:var(--ink);background:#fbfdfb;
+}
+.budget-results{margin-top:18px;}
+.budget-item{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;
+  margin-bottom:12px;transition:transform .2s ease,box-shadow .2s ease;
+}
+.budget-item:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(74,58,40,0.08);}
+.budget-item-title{font-family:var(--font-display);font-weight:600;font-size:17px;margin:0 0 4px;color:var(--ink);}
+.budget-item-price{font-family:var(--font-display);font-size:15.5px;color:var(--gold);font-weight:600;margin:0 0 8px;}
+.budget-item-reason{font-size:15.5px;color:var(--muted);margin:0 0 8px;line-height:1.6;}
+.budget-item-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+.budget-item-link{font-family:var(--font-display);font-size:13.5px;color:var(--pink);font-weight:600;text-decoration:none;background:rgba(169,118,58,0.1);border-radius:999px;padding:4px 12px;transition:background .15s;}
+.budget-item-link:hover{background:rgba(169,118,58,0.22);}
+.adv-result{margin-top:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;}
+.adv-result-card{border-radius:12px;padding:14px 16px;border:1px solid var(--line);background:var(--card);}
+.adv-result-label{font-family:var(--font-display);font-size:14px;letter-spacing:.5px;font-weight:600;margin:0 0 8px;}
+.adv-result-card ul{margin:0;padding-left:18px;font-size:16px;}
+.adv-result-card li{margin-bottom:4px;}
+.adv-result-card p{margin:0;font-size:16px;}
+.adv-color{border-left:4px solid var(--coral);}
+.adv-color .adv-result-label{color:var(--coral);}
+.adv-texture{border-left:4px solid var(--purple);}
+.adv-texture .adv-result-label{color:var(--purple);}
+.adv-occasion-card{border-left:4px solid var(--gold);}
+.adv-occasion-card .adv-result-label{color:var(--gold);}
+.adv-brand{border-left:4px solid var(--pink-light);}
+.adv-brand .adv-result-label{color:var(--pink);}
+.method-label{font-family:var(--font-display);font-size:14px;letter-spacing:1px;color:var(--pink);text-transform:uppercase;margin-bottom:8px;}
+.input-row{display:flex;gap:8px;flex-wrap:wrap;}
+.text-field{
+  flex:1;min-width:160px;border:1px solid var(--line);border-radius:10px;padding:11px 14px;
+  font-family:var(--font-body);font-size:17.5px;color:var(--ink);background:#fbfdfb;
+}
+.text-field:focus{outline:none;border-color:var(--pink-light);box-shadow:0 0 0 3px rgba(169,118,58,0.15);}
+.btn{
+  font-family:var(--font-display);font-weight:600;font-size:16.5px;border:none;border-radius:999px;
+  padding:11px 22px;cursor:pointer;transition:transform .15s ease,opacity .15s ease,box-shadow .2s ease;
+}
+.btn-primary{background:linear-gradient(135deg,var(--pink),var(--gold));color:#fff;box-shadow:0 4px 14px rgba(169,118,58,0.35);}
+.btn-primary:hover{opacity:.92;box-shadow:0 6px 18px rgba(169,118,58,0.45);}
+.btn-primary:active{transform:scale(.97);}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;}
+.chip{
+  font-size:15px;background:rgba(169,118,58,0.1);color:var(--pink);border:none;
+  border-radius:999px;padding:5px 12px;cursor:pointer;font-family:var(--font-body);
+}
+.chip:hover{background:rgba(169,118,58,0.2);}
+
+.error-box{
+  margin-top:16px;background:rgba(193,101,74,0.08);border:1px solid rgba(193,101,74,0.3);
+  color:var(--coral);border-radius:10px;padding:10px 14px;font-size:16.5px;
+}
+.warn-box{
+  margin-top:16px;background:rgba(193,101,74,0.1);border:1px solid rgba(193,101,74,0.35);
+  color:#9a3f26;border-radius:10px;padding:10px 14px;font-size:16px;
+}
+
+.results{margin-top:28px;opacity:0;transform:translateY(10px);transition:opacity .4s ease,transform .4s ease;}
+.results.show{opacity:1;transform:translateY(0);}
+.result-id{
+  background:linear-gradient(135deg,var(--pink) 0%,var(--gold) 100%);
+  color:#fff;border-radius:18px;padding:18px 20px;margin-bottom:16px;box-shadow:0 8px 22px rgba(169,118,58,0.25);
+}
+.result-id .label{font-family:var(--font-display);font-size:13px;letter-spacing:1.5px;opacity:.65;text-transform:uppercase;}
+.result-id p{margin:6px 0 0;font-size:19px;}
+.result-id .en-name{font-size:15.5px;opacity:.7;margin-top:4px;}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;}
+.result-card{border-radius:16px;padding:16px 18px;border:1px solid var(--line);background:var(--card);transition:transform .2s ease,box-shadow .2s ease;}
+.result-card:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(74,58,40,0.08);}
+.result-card .label{
+  font-family:var(--font-display);font-size:14px;letter-spacing:1px;text-transform:uppercase;
+  display:flex;align-items:center;gap:6px;margin-bottom:8px;font-weight:600;
+}
+.result-card ul{margin:0;padding-left:20px;font-size:16.5px;}
+.result-card li{margin-bottom:5px;}
+.result-card p{margin:0;font-size:16.5px;}
+.card-pros{border-left:4px solid var(--sagegreen);}
+.card-pros .label{color:var(--sagegreen);}
+.card-cons{border-left:4px solid var(--coral);}
+.card-cons .label{color:var(--coral);}
+.card-suitable{border-left:4px solid var(--purple);}
+.card-suitable .label{color:var(--purple);}
+.card-price{border-left:4px solid var(--gold);}
+.card-price .label{color:var(--gold);}
+.card-reviews{border-left:4px solid var(--magenta);}
+.card-reviews .label{color:var(--magenta);}
+.card-full{grid-column:1 / -1;}
+.disclaimer-bottom{
+  margin-top:18px;font-size:15px;color:var(--muted);background:rgba(193,101,74,0.06);
+  border:1px solid rgba(193,101,74,0.2);border-radius:10px;padding:10px 14px;
+}
+.db-note{
+  margin-top:18px;font-size:14px;color:var(--muted);background:rgba(139,115,150,0.06);
+  border:1px solid rgba(139,115,150,0.2);border-radius:10px;padding:10px 14px;
+}
+
+@media (max-width:520px){
+  .wrap{padding:26px 16px 48px;}
+  .panel{padding:18px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <svg class="hero-decor hd-sparkle" viewBox="0 0 60 60" aria-hidden="true">
+    <path d="M30 4 L34 26 L56 30 L34 34 L30 56 L26 34 L4 30 L26 26 Z" fill="var(--pink-light)"/>
+    <circle cx="48" cy="14" r="3" fill="var(--gold)"/>
+    <circle cx="12" cy="46" r="2.5" fill="var(--purple)"/>
+  </svg>
+  <svg class="hero-decor hd-heart" viewBox="0 0 60 54" aria-hidden="true">
+    <path d="M30 50 C10 36 2 24 2 14 C2 4 10 0 16 0 C22 0 28 4 30 12 C32 4 38 0 44 0 C50 0 58 4 58 14 C58 24 50 36 30 50 Z" fill="var(--coral)"/>
+  </svg>
+  <svg class="hero-decor hd-flower" viewBox="0 0 60 60" aria-hidden="true">
+    <g fill="none" stroke="var(--pink)" stroke-width="2">
+      <circle cx="30" cy="14" r="7"/><circle cx="30" cy="46" r="7"/>
+      <circle cx="14" cy="30" r="7"/><circle cx="46" cy="30" r="7"/>
+    </g>
+    <circle cx="30" cy="30" r="7" fill="var(--gold)"/>
+  </svg>
+
+  <p class="eyebrow">INGREDIENT LOOKUP ・ 成分固定整理 + 品牌價格即時查詢</p>
+  <h1>成分速查</h1>
+  <div class="disclaimer-top">⚠️ 成分優缺點為固定整理的衛教參考資料，僅供參考，不是醫療或藥事建議；品牌定位與價格則為即時查詢結果，仍可能與實際售價有落差。過敏體質、孕哺期或特殊健康狀況請洽詢醫師或藥師，第一次使用任何新產品都建議先做貼膚測試。</div>
+
+  <div class="history-wrap" id="history-wrap" hidden>
+    <div class="history-head">
+      <p class="history-label">🕒 最近查詢</p>
+      <button class="btn-link" id="history-clear-btn" type="button">清除紀錄</button>
+    </div>
+    <div class="chips" id="history-list"></div>
+  </div>
+
+  <div class="allergy-panel" id="allergy-panel">
+    <div class="allergy-summary">
+      <span class="allergy-summary-text" id="allergy-summary-text">還沒填寫過敏風險評估</span>
+      <button class="btn-link" id="allergy-toggle-btn" type="button">填寫問卷 ▾</button>
+    </div>
+    <div class="allergy-form" id="allergy-form" hidden>
+      <p class="allergy-note">這份問卷不是醫療診斷，只是根據常見反應模式，幫你推測「可能需要留意」的成分方向；真正要確定，還是要靠皮膚科的貼膚測試或就診。</p>
+
+      <p class="q-title">1. 你有被診斷過以下狀況嗎？（可多選）</p>
+      <div class="q-options">
+        <label><input type="checkbox" name="q1" value="atopic"> 異位性皮膚炎／濕疹</label>
+        <label><input type="checkbox" name="q1" value="rosacea"> 酒糟性皮膚炎／玫瑰斑</label>
+        <label><input type="checkbox" name="q1" value="urticaria"> 蕁麻疹病史</label>
+        <label><input type="checkbox" name="q1" value="contact"> 醫師診斷過的接觸性皮膚炎</label>
+        <label><input type="checkbox" name="q1" value="none"> 沒有，皮膚算穩定</label>
+        <label><input type="checkbox" name="q1" value="unsure"> 不確定</label>
+      </div>
+
+      <p class="q-title">2. 用以下類型產品時，是否曾經泛紅、搔癢、刺痛或起疹子？（可多選）</p>
+      <div class="q-options">
+        <label><input type="checkbox" name="q2" value="fragrance"> 香水或香味很重的保養品</label>
+        <label><input type="checkbox" name="q2" value="alcohol"> 收斂水／控油產品（常含酒精）</label>
+        <label><input type="checkbox" name="q2" value="acids"> 去角質／美白／抗老產品（果酸、水楊酸、A醇）</label>
+        <label><input type="checkbox" name="q2" value="oil"> 精油按摩油或天然香氛產品</label>
+        <label><input type="checkbox" name="q2" value="dye"> 染髮劇</label>
+        <label><input type="checkbox" name="q2" value="metal"> 戴項鍊／耳環等金屬飾品</label>
+        <label><input type="checkbox" name="q2" value="cosmetic_dye"> 彩妝／化妝品（粉底、唇膏、睫毛膏等）</label>
+        <label><input type="checkbox" name="q2" value="none"> 都沒有特別反應過</label>
+        <label><input type="checkbox" name="q2" value="unsure"> 不確定，沒特別注意過</label>
+      </div>
+
+      <p class="q-title">3. 反應通常多快出現？</p>
+      <div class="q-options">
+        <label><input type="radio" name="q3" value="fast"> 用了之後幾分鐘到幾小時內</label>
+        <label><input type="radio" name="q3" value="slow"> 隔了一兩天才慢慢出現</label>
+        <label><input type="radio" name="q3" value="na"> 沒反應過，不適用</label>
+        <label><input type="radio" name="q3" value="unsure"> 不確定</label>
+      </div>
+
+      <p class="q-title">4. 家人（父母、兄弟姊妹）有過敏體質、氣喘或異位性皮膚炎嗎？</p>
+      <div class="q-options">
+        <label><input type="radio" name="q4" value="yes"> 有</label>
+        <label><input type="radio" name="q4" value="no"> 沒有</label>
+        <label><input type="radio" name="q4" value="unsure"> 不確定</label>
+      </div>
+
+      <button class="btn btn-primary" id="allergy-submit-btn" type="button">產生我的風險成分備註</button>
+
+      <div class="allergy-result" id="allergy-result" hidden>
+        <p class="q-title">建議留意的成分方向</p>
+        <ul id="allergy-result-list"></ul>
+        <p class="allergy-note">這是根據你的回答推測的方向，不是確診結果。之後查詢成分時，如果符合會自動提醒。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="category-tabs" id="category-tabs">
+      <button class="cat-tab active" data-cat="supplement" type="button">💊 保健食品</button>
+      <button class="cat-tab" data-cat="skincare" type="button">🧴 保養品</button>
+      <button class="cat-tab" data-cat="cosmetic" type="button">💄 化妝品</button>
+    </div>
+
+    <div class="sub-tabs" id="sub-tabs">
+      <button class="sub-tab active" data-mode="ingredient" type="button">依成分查詢</button>
+      <button class="sub-tab" data-mode="brand" type="button">依品牌瀏覽</button>
+      <button class="sub-tab" data-mode="budget" type="button">依預算找產品</button>
+      <button class="sub-tab" data-mode="advisor" id="advisor-tab" type="button" hidden>專業選色推薦</button>
+    </div>
+
+    <div id="ingredient-mode">
+      <p class="method-label">輸入成分或產品名稱（打前幾個字就能找到）</p>
+      <div class="input-row">
+        <input type="text" id="text-input" class="text-field" placeholder="例如：魚油、B群、XX 益生菌...">
+        <button class="btn btn-primary" id="search-btn" type="button">查詢</button>
+      </div>
+      <div class="chips" id="chips"></div>
+    </div>
+
+    <div id="brand-mode" hidden>
+      <p class="method-label">輸入品牌名稱，即時查詢目前市場行情（打前幾個字就能找到，只會搜尋目前這個分類）</p>
+      <div class="input-row">
+        <input type="text" id="brand-input" class="text-field" placeholder="例如：DR.WU、白蘭氏、媚比琳...">
+        <button class="btn btn-primary" id="brand-search-btn" type="button">查詢</button>
+      </div>
+      <div class="chips" id="brand-chips"></div>
+      <div class="error-box" id="brand-error-box" hidden></div>
+      <div class="brand-info" id="brand-info" hidden>
+        <span class="live-tag"><span class="dot"></span>即時查詢結果</span>
+        <p class="brand-tier" id="brand-tier"></p>
+        <p class="brand-desc" id="brand-desc"></p>
+        <p class="brand-flagship-title">代表商品（目前約略行情）</p>
+        <ul id="brand-flagship-list"></ul>
+        <p class="live-stamp" id="brand-live-stamp"></p>
+      </div>
+    </div>
+
+    <div id="budget-mode" hidden>
+      <p class="method-label">輸入預算上限，即時查詢目前分類裡符合預算的品牌商品</p>
+      <div class="adv-grid">
+        <div class="adv-field">
+          <label class="adv-label">預算上限（NT$）</label>
+          <input type="number" id="budget-input" class="text-field" placeholder="例如：500" min="0">
+        </div>
+        <div class="adv-field">
+          <label class="adv-label">想找的產品類型（可留空）</label>
+          <input type="text" id="budget-keyword" class="text-field" placeholder="例如：化妝水、唇膏...">
+        </div>
+      </div>
+      <button class="btn btn-primary" id="budget-search-btn" type="button">搜尋符合預算的商品</button>
+      <div class="error-box" id="budget-error-box" hidden></div>
+      <div class="budget-results" id="budget-results"></div>
+      <p class="db-note" id="budget-live-stamp">以上 4 個通路連結（momo、PChome、蝦皮、淘寶）均為搜尋結果頁，不是商品詳情頁，不保證每個平台都有現貨；由 AI 即時查詢整理，實際售價以各平台當下標示為準。</p>
+    </div>
+
+    <div id="advisor-mode" hidden>
+      <p class="method-label">回答幾個問題，像專業彩妝師一樣幫你建議色系與質地</p>
+      <div class="adv-grid">
+        <div class="adv-field">
+          <label class="adv-label">膚色調</label>
+          <select id="adv-undertone">
+            <option value="warm">暖調（黃皮）</option>
+            <option value="cool">冷調（粉皮）</option>
+            <option value="neutral">中性調</option>
+            <option value="olive">橄欖調</option>
+            <option value="unsure">不確定</option>
+          </select>
+        </div>
+        <div class="adv-field">
+          <label class="adv-label">膚色深淺</label>
+          <select id="adv-depth">
+            <option value="fair">白皙</option>
+            <option value="medium">中等</option>
+            <option value="deep">偏深</option>
+          </select>
+        </div>
+        <div class="adv-field">
+          <label class="adv-label">膚質</label>
+          <select id="adv-skintype">
+            <option value="dry">乾性</option>
+            <option value="oily">油性</option>
+            <option value="combo">混合性</option>
+            <option value="sensitive">敏感性</option>
+          </select>
+        </div>
+        <div class="adv-field">
+          <label class="adv-label">想挑選的產品</label>
+          <select id="adv-product">
+            <option value="foundation">粉底液</option>
+            <option value="lipstick">唇膏</option>
+            <option value="blush">腮紅</option>
+            <option value="eyeshadow">眼影</option>
+            <option value="mascara">睫毛膏</option>
+            <option value="cleansingoil">卸妝油</option>
+          </select>
+        </div>
+        <div class="adv-field">
+          <label class="adv-label">場合</label>
+          <select id="adv-occasion">
+            <option value="daily">日常通勤</option>
+            <option value="date">約會聚會</option>
+            <option value="formal">正式場合</option>
+            <option value="bold">嘗鮮玩色</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-primary" id="adv-submit-btn" type="button">產生我的推薦</button>
+
+      <div class="adv-result" id="adv-result" hidden>
+        <div class="adv-result-card adv-color">
+          <p class="adv-result-label">🎨 色彩建議</p>
+          <div id="adv-r-color"></div>
+        </div>
+        <div class="adv-result-card adv-texture">
+          <p class="adv-result-label">✨ 質地／配方建議</p>
+          <div id="adv-r-texture"></div>
+        </div>
+        <div class="adv-result-card adv-occasion-card">
+          <p class="adv-result-label">📅 場合建議</p>
+          <div id="adv-r-occasion"></div>
+        </div>
+        <div class="adv-result-card adv-brand">
+          <p class="adv-result-label">🏷️ 可參考的品牌</p>
+          <div id="adv-r-brand"></div>
+        </div>
+      </div>
+      <p class="db-note">這是依據一般彩妝顧問常用的配色邏輯給的方向建議，不是針對你個人膚況的專業診斷；實際選色仍建議到櫃上試色或請 BA 協助比對。</p>
+    </div>
+
+    <div class="error-box" id="error-box" hidden></div>
+  </div>
+
+  <div class="results" id="results" hidden>
+    <div class="warn-box" id="warn-box" hidden></div>
+    <div class="result-id">
+      <p class="label">辨識結果 <span id="r-cat-badge" class="cat-badge"></span></p>
+      <p id="r-id"></p>
+      <p class="en-name" id="r-en-name"></p>
+    </div>
+    <div class="result-grid">
+      <div class="result-card card-pros">
+        <p class="label">✓ 優點</p>
+        <div id="r-pros"></div>
+      </div>
+      <div class="result-card card-cons">
+        <p class="label">✕ 缺點</p>
+        <div id="r-cons"></div>
+      </div>
+      <div class="result-card card-suitable">
+        <p class="label">◆ 適合特性</p>
+        <div id="r-suitable"></div>
+      </div>
+      <div class="result-card card-price">
+        <p class="label">$ 價格參考</p>
+        <div id="r-price"></div>
+      </div>
+      <div class="result-card card-reviews card-full">
+        <p class="label">★ 網路評價摘要</p>
+        <div id="r-reviews"></div>
+      </div>
+    </div>
+    <div class="disclaimer-bottom">⚠️ 以上為固定整理的參考資料，僅供參考，非醫療建議；過敏體質或特殊健康狀況請諮詢專業醫師或藥師。</div>
+    <div class="db-note">資料來源：根據一般市售通路（屈臣氏、大樹藥局、momo、PChome 等）行情與公開美妝/保健討論整理而成，非即時資料，實際價格與評價會隨時間、品牌、促銷活動變動。</div>
+  </div>
+</div>
+
+<script src="brand-data.js"></script>
+<script>
+(function(){
+  /* ===== 分類與快速建議 ===== */
+  var currentCategory = 'supplement';
+  var CATEGORY_LABEL = { supplement:'保健食品', skincare:'保養品', cosmetic:'化妝品' };
+  var CATEGORY_PLACEHOLDER = {
+    supplement: '例如：魚油、B群、XX 益生菌...',
+    skincare: '例如：玻尿酸、A醇、XX 精華液...',
+    cosmetic: '例如：粉底液、唇膏、XX 蜜粉...'
+  };
+
+  /* ===== 查詢紀錄（記住使用者最近查過的成分/品牌） ===== */
+  var HISTORY_KEY = 'mm_search_history';
+  var MAX_HISTORY = 8;
+
+  function loadHistory(){
+    try{ return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }catch(e){ return []; }
+  }
+  function saveHistory(history){
+    try{ localStorage.setItem(HISTORY_KEY, JSON.stringify(history)); }catch(e){}
+  }
+  function addToHistory(type, category, name){
+    var history = loadHistory();
+    history = history.filter(function(h){ return !(h.type === type && h.name === name && h.category === category); });
+    history.unshift({ type: type, category: category, name: name });
+    if(history.length > MAX_HISTORY){ history = history.slice(0, MAX_HISTORY); }
+    saveHistory(history);
+    renderHistory();
+  }
+  function renderHistory(){
+    var history = loadHistory();
+    var wrap = document.getElementById('history-wrap');
+    var list = document.getElementById('history-list');
+    if(!history.length){ wrap.hidden = true; return; }
+    wrap.hidden = false;
+    list.innerHTML = '';
+    history.forEach(function(h){
+      var btn = document.createElement('button');
+      btn.className = 'chip history-chip';
+      btn.type = 'button';
+      btn.textContent = (h.type === 'brand' ? '🏷️ ' : '🔍 ') + h.name;
+      btn.addEventListener('click', function(){
+        selectCategory(h.category);
+        if(h.type === 'ingredient'){
+          document.querySelector('.sub-tab[data-mode="ingredient"]').click();
+          textInput.value = h.name;
+          runQuery();
+        } else {
+          document.querySelector('.sub-tab[data-mode="brand"]').click();
+          document.getElementById('brand-input').value = h.name;
+          runBrandQuery();
+        }
+      });
+      list.appendChild(btn);
+    });
+  }
+  document.getElementById('history-clear-btn').addEventListener('click', function(){
+    saveHistory([]);
+    renderHistory();
+  });
+
+  /* ===== 固定資料庫 ===== */
+  var DB = {
+    supplement: {
+      '魚油': {
+        en: 'Fish Oil (Omega-3 EPA/DHA)',
+        pros: ['富含 Omega-3 脂肪酸（EPA、DHA），有助於維持心血管健康、調節三酸甘油脂', 'DHA 是腦部與眼睛視網膜的重要組成成分，部分研究顯示對認知功能有幫助', '具抗發炎特性，部分研究用於緩解乾眼症狀'],
+        cons: ['服用過量可能增加出血風險，服用抗凝血藥物或準備手術者要特別注意', '部分人服用後會有魚腥味打嗝、腸胃不適等副作用', '品質落差大，劣質魚油可能氧化、重金屬殘留風險較高'],
+        suitable: ['適合：心血管保養需求者、長時間用眼族群、魚類攝取量不足者', '不適合：服用抗凝血藥物者、即將手術者、對魚類過敏者，使用前建議諮詢醫師'],
+        price: '一般通路約 NT$400-1,500／瓶（60-120顆，約1-2個月用量），高濃度 rTG 型通常較貴',
+        reviews: '討論多關注「Omega-3 濃度」與「型態（rTG/TG/EE）」，濃度高評價較正向；常見抱怨是吃了打嗝有魚味，或覺得需長期食用才有感',
+        riskTags: []
+      },
+      '益生菌': {
+        en: 'Probiotics',
+        pros: ['補充腸道有益菌種，可能改善排便、腹脹等不適', '部分菌株（如特定 LGG、BB-12）有較多研究支持腸道菌相平衡', '添加益菌生（Prebiotics）有助於益生菌存活與作用'],
+        cons: ['效果因菌株、菌數與個人腸道狀況差異很大，並非吃了就一定有感', '免疫力嚴重低下者（如化療中、術後）服用活菌可能有風險，需先諮詢醫師', '部分產品需冷藏保存，常溫保存不當可能影響菌種存活率'],
+        suitable: ['適合：排便不順、腹脹困擾者、抗生素療程後想補充腸道菌相者', '不適合：免疫力嚴重低下、重症患者；對乳製品嚴重過敏者要留意菌種培養基來源'],
+        price: '一般通路約 NT$300-1,200／盒（30包，約1個月用量），標示專利菌株或高菌數的產品價格較高',
+        reviews: '討論多聚焦「有沒有改善排便」，敏感腸胃族群正評較多；負評常提到「吃了沒感覺」或菌株標示不透明',
+        riskTags: []
+      },
+      'B群': {
+        en: 'Vitamin B Complex',
+        pros: ['參與能量代謝，常用於緩解疲勞、提神', '對神經系統運作、皮膚黏膜健康有幫助', '水溶性維生素，多餘的會隨尿液排出，安全性相對高'],
+        cons: ['大劑量長期服用某些成分（如B6）有報告指出可能與周邊神經病變相關', '服用後尿液變黃（核黃素代謝產物）是正常現象，常被誤認為副作用', '部分人空腹服用會感到胃部不適'],
+        suitable: ['適合：長期疲勞、外食族營養不均衡者、壓力大族群', '不適合：腎功能不佳者建議先諮詢醫師，過量補充非必要'],
+        price: '一般通路約 NT$150-600／瓶或盒（30-60錠，約1個月用量），發泡錠或液態飲品價格略高',
+        reviews: '普遍評價「提神效果因人而異」；尿液變黃常被討論，多數已釐清是正常代謝反應',
+        riskTags: []
+      },
+      '維生素D': {
+        en: 'Vitamin D3',
+        pros: ['有助於鈣、磷吸收，對骨骼健康至關重要', '與免疫調節功能有關，近年研究關注度高', '長期室內工作或防曬習慣良好者容易缺乏，補充有實際意義'],
+        cons: ['過量補充（長期超過建議上限）有高血鈣風險', '脂溶性維生素，不像水溶性容易排出，需注意累積風險', '與部分藥物（如某些利尿劑）可能有交互作用'],
+        suitable: ['適合：日照量不足者、長者、骨質疏鬆風險族群', '不適合：高血鈣症、腎臟疾病患者服用前建議諮詢醫師'],
+        price: '一般通路約 NT$200-700／瓶（60-90顆或噴劑），噴劑型與膠囊價格相近',
+        reviews: '多數是「健檢報告顯示缺乏才開始補充」，評價普遍正向；主要提醒是不要自行補充過高劑量',
+        riskTags: []
+      },
+      '葉黃素': {
+        en: 'Lutein',
+        pros: ['是黃斑部的主要色素成分，常用於護眼保養', '具抗氧化特性，有助減少藍光潛在氧化壓力', '搭配玉米黃素（Zeaxanthin）一起補充，研究支持度較高'],
+        cons: ['效果需長期累積，短期不會有「視力變好」的明顯效果', '部分產品葉黃素濃度標示與實際不符，挑選需留意檢驗報告', '游離型與酯化型吸收率不同，價格也因此有差異'],
+        suitable: ['適合：長時間用電腦／手機族群、長者黃斑部保養需求', '不適合：一般無特殊禁忌，但不能取代正規眼科治療'],
+        price: '一般通路約 NT$400-1,000／瓶（30-60顆，約1個月用量），高濃度遊離型價格較高',
+        reviews: '普遍認知「是保養不是治療」，長期使用者多反饋疲勞感減輕；負評常提到「沒有立刻有感覺」',
+        riskTags: []
+      },
+      '膠原蛋白': {
+        en: 'Collagen',
+        pros: ['小分子水解膠原蛋白胜肽理論上較易被人體吸收', '部分臨床研究顯示對皮膚保水度、彈性有正向幫助', '產品口感佳（沖泡飲、果凍），依從性較高'],
+        cons: ['口服後能否「精準」補到皮膚膠原蛋白，學界仍有不同意見', '部分產品額外添加糖分熱量不低，需留意成分標示', '海洋性膠原蛋白對海鮮過敏者需留意來源'],
+        suitable: ['適合：在意肌膚保水彈性、術後或運動後想加強蛋白質攝取者', '不適合：對魚類／海鮮過敏者需先確認來源（魚膠原 vs 豬牛膠原）'],
+        price: '一般通路約 NT$500-1,500／盒（依包裝形式差異大），日系與歐美進口品牌價格偏高',
+        reviews: '討論熱度高，正評多圍繞「皮膚變水潤有彈性」的主觀感受；負評質疑科學證據與行銷話術的落差',
+        riskTags: []
+      }
+    },
+    skincare: {
+      '玻尿酸': {
+        en: 'Hyaluronic Acid / Sodium Hyaluronate',
+        pros: ['強大保濕鎖水能力，能吸附自身重量數百倍的水分', '質地清爽不黏膩，幾乎適合所有膚質，致敏性低', '多分子量複合配方可同時提供表層與深層保濕'],
+        cons: ['單純玻尿酸保濕有時效性，環境乾燥若沒鎖水反而可能更乾（倒拔水現象）', '部分產品添加酒精，敏感肌或受損屏障使用可能刺激', '無法解決毛孔、痘痘、色素等其他肌膚問題'],
+        suitable: ['適合：所有膚質的日常保濕，尤其乾燥脫水肌膚', '不適合：含酒精版本不建議在酸類煥膚或雷射術後立即使用'],
+        price: '一般通路約 NT$300-1,200／瓶（30-50ml），開架品牌多落在 NT$400-800',
+        reviews: '評價普遍正向，視為基礎保濕款；常見提醒是「單擦不夠，需搭配乳液乳霜鎖水」',
+        riskTags: ['alcohol']
+      },
+      '維生素C': {
+        en: 'Vitamin C / Ascorbic Acid',
+        pros: ['具抗氧化能力，有助對抗紫外線、汙染造成的自由基傷害', '部分研究支持輔助美白、抑制黑色素生成、提亮膚色', '高濃度純維生素C也有助促進膠原蛋白生成'],
+        cons: ['純維生素C穩定性差，容易氧化變黃變質且具刺激性', '與部分A醇、果酸同時使用可能增加刺激，需錯開使用時間', '高濃度產品對部分人可能引發泛紅、刺痛'],
+        suitable: ['適合：在意膚色不均、暗沉、想加強抗氧化保養者（早上使用，搭配防曬）', '不適合：敏感肌建議從低濃度衍生物開始；使用A酸治療者請先諮詢醫師'],
+        price: '一般通路約 NT$400-1,500／瓶（30ml左右），抗氧化包裝技術越好價格越高',
+        reviews: '「早C晚A」是熱門關鍵字，正評集中在提亮主觀感受；負評常提到刺激泛紅或氧化變色',
+        riskTags: []
+      },
+      'A醇': {
+        en: 'Retinol',
+        pros: ['廣泛被皮膚科研究支持，對抗老化、促進角質代謝、改善痘痘有實證', '相對A酸較溫和，較容易入手嘗試', '長期使用可改善膚質紋理與毛孔外觀'],
+        cons: ['初期常見「A醇反應」：脫皮、泛紅、刺激乾燥，需建立耐受性', '具光敏感性，使用期間白天防曬要做足', '孕婦及哺乳者不建議使用'],
+        suitable: ['適合：在意細紋、毛孔、痘痘肌想改善膚質紋理者（建議晚上使用）', '不適合：孕婦、哺乳中、嚴重屏障受損肌膚；初學者建議從低濃度開始'],
+        price: '一般通路約 NT$500-1,800／瓶（30ml左右），緩釋包覆技術越好價格越高',
+        reviews: '討論常圍繞「怎麼建立耐受度」，正評多在使用3個月以上後出現；負評集中在初期爆痘脫皮的適應期',
+        riskTags: []
+      },
+      '菸鹼醯胺': {
+        en: 'Niacinamide / Vitamin B3',
+        pros: ['多功能成分，有助調節皮脂、縮小毛孔外觀、改善膚色不均與細紋', '相對溫和，大部分膚質（含敏感肌）耐受度較高', '有研究支持強化皮膚屏障、增加天然保濕因子'],
+        cons: ['高濃度（10%以上）部分人會出現泛紅刺癢的「潮紅」反應', '與高濃度純維生素C同時使用，理論上可能降低效果或刺激', '效果溫和漸進，不會有立竿見影的戲劇性變化'],
+        suitable: ['適合：油性肌、毛孔粗大困擾者，幾乎所有膚質都可嘗試', '不適合：曾出現潮紅反應者建議從低濃度（5%）開始測試'],
+        price: '一般通路約 NT$300-900／瓶（30ml左右），是開架保養品中性價比較高的熱門成分',
+        reviews: '網路討論一致認為是「萬用成分」，評價普遍正向；少數負評提到的潮紅反應討論度也不低',
+        riskTags: []
+      },
+      '勝肽': {
+        en: 'Peptides',
+        pros: ['訊息傳遞胜肽（如Matrixyl系列）被認為能刺激皮膚自然生成膠原蛋白與彈力蛋白', '部分胜肽（如類肉毒胜肽）主打放鬆表情肌、減緩動態細紋外觀', '相對溫和不刺激，可與多數其他保養成分搭配'],
+        cons: ['胜肽分子量較大，穿透效率與實證等級在學術上仍有討論空間', '產品標示種類繁多，消費者難以判斷實際添加濃度與品質', '效果需長期使用（通常2-3個月以上）才逐漸顯現'],
+        suitable: ['適合：熟齡肌、在意初老徵兆、想溫和加強抗老保養者', '不適合：一般無明顯禁忌，但不應期待替代醫美療程效果'],
+        price: '一般通路約 NT$600-2,000／瓶，精華液類通常比乳液乳霜貴',
+        reviews: '討論度中等，正評集中在「長期使用後紋路較不明顯」；也有聲音質疑廣告話術與實際效果落差',
+        riskTags: []
+      },
+      '果酸': {
+        en: 'AHA / Glycolic Acid, Lactic Acid',
+        pros: ['促進角質代謝、改善粗糙暗沉、淡化痘疤色素沉澱', '可同步改善毛孔堵塞，對痘痘膚質有幫助', '不同分子大小（如杏仁酸較大）可依膚質選擇刺激度'],
+        cons: ['具去角質作用，使用後光敏感度提高，白天防曬要加強', '過度頻繁或濃度過高容易屏障受損、泛紅刺痛', '不建議與A醇、高濃度維生素C同時於同一時段使用'],
+        suitable: ['適合：粗糙暗沉、痘痘痘疤困擾者（建議晚上使用，新手從低濃度開始）', '不適合：敏感肌、屏障受損中、孕婦哺乳期建議先諮詢專業意見'],
+        price: '一般通路約 NT$400-1,200／瓶，藥妝品牌與專業沙龍品牌價格區間略有不同',
+        reviews: '討論常聚焦「多久用一次」「濃度怎麼選」；負評常見「用太頻繁爆痘脫皮」',
+        riskTags: ['acids']
+      }
+    },
+    cosmetic: {
+      '粉底液': {
+        en: 'Liquid Foundation',
+        pros: ['能修飾膚色不均、遮蓋瑕疵，提升整體膚質視覺效果', '現代配方常添加保養成分（玻尿酸、維生素衍生物）', '質地選擇多元，可依膚質與妝感需求挑選'],
+        cons: ['長時間配戴可能造成毛孔堵塞，清潔不徹底容易誘發粉刺痘痘', '部分產品含香精、酒精，敏感肌使用可能刺激泛紅', '色號選擇不當容易顯得不自然'],
+        suitable: ['適合：想修飾膚色不均、毛孔、痘印者；油肌選控油霧光型，乾肌選保濕光澤型', '不適合：嚴重痘痘發炎期建議減少厚重底妝'],
+        price: '開架品牌約 NT$170-700（媚比琳、INTEGRATE、KATE、1028），專櫃品牌約 NT$1,500-3,000以上（Dior、YSL、Armani Beauty）',
+        reviews: '2026年趨勢偏好「輕薄水光、養膚型」；開架品牌常被討論「平價高效」，專櫃在持妝細緻度評價較高但價格也是常見抱怨',
+        riskTags: ['cosmetic_dye']
+      },
+      '唇膏': {
+        en: 'Lipstick',
+        pros: ['快速提升氣色，是性價比高的化妝品類別之一', '現代配方多添加保濕成分（乳油木果脂、玻尿酸）', '顯色度直接，妝效立竿見影'],
+        cons: ['顯色力強的唇膏（尤其紅色、深色系）色料可能是接觸性過敏來源', '長效不沾杯配方通常較乾燥，需注意護唇保養', '直接接觸口腔黏膜，成分安全性要求應更嚴謹'],
+        suitable: ['適合：想快速提升氣色、修飾唇色不均者', '不適合：唇部有傷口、唇疹發作期間應避免上妝'],
+        price: '開架品牌約 NT$200-500（媚比琳、KISSME、3CE），專櫃品牌約 NT$800-1,800（YSL、Dior、香奈兒）',
+        reviews: '討論度很高，網友常分享色號試色；負評多圍繞「乾燥卡唇紋」或「容易暈染脫色」',
+        riskTags: ['cosmetic_dye']
+      },
+      '睫毛膏': {
+        en: 'Mascara',
+        pros: ['能放大、加長睫毛，提升眼部妝感層次', '防水配方適合運動、流汗、潤眼等場合，持久度高', '現代纖維配方能達到視覺增量效果'],
+        cons: ['開封後使用期限短（建議3-6個月內用完），逾期使用感染風險高（結膜炎、麥粒腫）', '防水配方需專用卸妝液，卸除不當易拉扯睫毛', '部分纖維、防水成分對極敏感眼周肌膚可能刺激'],
+        suitable: ['適合：想放大加長睫毛、提升眼妝層次者', '不適合：眼部正處於發炎、結膜炎時應避免使用；不建議與他人共用'],
+        price: '開架品牌約 NT$300-600（媚比琳、KISSME），專櫃品牌約 NT$900-1,600（蘭蔻、YSL、香奈兒）',
+        reviews: '討論集中在「會不會暈眼妝」「好不好卸」；衛生風險（開封期限）是常被提醒但網友較少注意的重點',
+        riskTags: ['cosmetic_dye']
+      },
+      '腮紅': {
+        en: 'Blush',
+        pros: ['能快速提升氣色、修飾臉部輪廓立體度', '粉狀、霜狀、液狀質地多元，可依喜好選擇', '用量少效果明顯，使用壽命通常較長'],
+        cons: ['粉狀腮紅長期使用刷具若不清潔，容易孳生細菌', '部分高顯色度產品色料對敏感肌可能輕微刺激', '顏色選擇不當容易顯得突兀不自然'],
+        suitable: ['適合：想提升氣色、修飾臉型者，幾乎所有妝容都適用', '不適合：臉頰肌膚正處於發炎、過敏狀態時建議先暫停'],
+        price: '開架品牌約 NT$200-500（KATE、CANMAKE、媚比琳），專櫃品牌約 NT$1,000-1,800（NARS、香奈兒、植村秀）',
+        reviews: '討論集中在「顯色度」與「持久度」，日系開架品牌評價穩定正向；負評較少，主要是色號搭配的主觀差異',
+        riskTags: ['cosmetic_dye']
+      },
+      '眼影': {
+        en: 'Eyeshadow',
+        pros: ['能豐富眼部妝容層次，創造深邃或明亮的視覺效果', '多色盤設計方便混搭與收納，使用靈活度高', '珠光、霧面、絲絨等質地多元，可營造不同風格'],
+        cons: ['細緻粉質容易飛粉掉落眼周，敏感肌膚可能因此刺激', '部分珠光眼影含雲母粉體，極敏感眼周耐受度因人而異', '深色系卸妝不徹底，色素易殘留在眼周細紋中'],
+        suitable: ['適合：想豐富眼妝層次、嘗試不同風格妝容者', '不適合：眼部正處於發炎或剛做完眼周醫美療程，建議先暫停'],
+        price: '開架品牌約 NT$200-600（媚比琳、KATE），專櫃品牌約 NT$1,200-2,500（NARS、湯姆福特、UD）',
+        reviews: '討論度高，多色眼影盤的「色彩搭配教學」很受歡迎；負評偏少，主要圍繞飛粉與卸妝難易度',
+        riskTags: ['cosmetic_dye']
+      },
+      '卸妝油': {
+        en: 'Cleansing Oil',
+        pros: ['能有效溶解防水彩妝、厚重底妝與防曬乳', '部分產品添加保養油脂成分，卸妝同時兼具滋潤', '乳化後遇水變白，方便確認是否完全沖洗乾淨'],
+        cons: ['油性肌或痘痘肌使用厚重卸妝油，沖洗不徹底可能加重粉刺', '部分含礦物油成分，敏感肌長期使用可能影響屏障', '眼周使用需特別小心，不慎入眼可能造成刺激'],
+        suitable: ['適合：經常上濃妝、防水彩妝、防曬乳的族群', '不適合：嚴重痘痘發炎肌膚建議選擇較清爽的卸妝產品'],
+        price: '開架品牌約 NT$300-700（DHC、媚泉、貝樂絲），專櫃品牌約 NT$1,200-2,000以上（蘭蔻、植村秀）',
+        reviews: '討論度高，植村秀、DHC等長年是熱門推薦款；正評集中在「卸妝力強又不緊繃」，負評提到「油肌用了長痘」',
+        riskTags: []
+      }
+    }
+  };
+
+  /* 子分類標籤（三大分類各 5 個，套用於即時查詢回傳的每個商品） */
+  var SUBCATS = {
+    supplement: ['腸胃消化','護眼保健','骨骼關節','提神活力','美容補充'],
+    skincare:   ['保濕鎖水','美白淡斑','抗老修復','敏感舒緩','控油淨痘'],
+    cosmetic:   ['底妝打底','唇部彩妝','眼部彩妝','腮紅修容','卸妝清潔']
+  };
+
+  /* 品牌名單：僅用於快速按鈕與輸入比對，價格與描述一律即時查詢，不寫死 */
+  var BRAND_NAMES = {
+    supplement: ['SUNLIFE 森萊富', '合利他命 Alinamin', 'DHC', '統一生機', '港香蘭', '桂格 Quaker', '白蘭氏', '三多 Sentosa', '善存 Centrum', '永信HAC', '台塑生醫', '葡萄王', '萊萃美', '活沛多 NutriPlus', '悠活原力', '大研生醫 DAIKEN', "BHK's", '正官庄', 'Vitabox', '好好生醫'],
+    skincare: ['我的美麗日記', '森田藥粧', '蜜妮 Biore', '肌研 Hada Labo', '妮維雅 NIVEA', 'The Ordinary', '卡尼爾 Garnier', 'CeraVe 適樂膚', '悅詩風吟 innisfree', 'AHC', 'DR.WU 達爾膚', '理膚寶水 La Roche-Posay', '簡單 JAN DAN', '契爾氏 Kiehl\u2019s', '蘭芝 Laneige', '雪肌精 SEKKISEI', '雪花秀 Sulwhasoo', '蘭蔻 Lancôme', '雅詩蘭黛 Estée Lauder', 'SK-II', '資生堂 Shiseido'],
+    cosmetic: ['橘子工坊 Citrus', '媚比琳 Maybelline', 'CANMAKE', 'INTEGRATE', 'ROMAND', 'Peripera', '1028', 'KISSME', '伊蒂之屋 Etude House', 'KATE', '3CE', 'Wakemake', 'M.A.C', 'NARS', '植村秀 Shu Uemura', 'YSL 聖羅蘭', 'Armani Beauty 亞曼尼', 'Dior 迪奧', '香奈兒 Chanel']
+  };
+
+  var BRAND_CHIPS = {
+    supplement: ['SUNLIFE 森萊富', 'DHC', '白蘭氏', '大研生醫 DAIKEN', '好好生醫'],
+    skincare: ['我的美麗日記', '肌研 Hada Labo', 'DR.WU 達爾膚', '蘭蔻 Lancôme', 'SK-II'],
+    cosmetic: ['橘子工坊 Citrus', '媚比琳 Maybelline', 'ROMAND', 'NARS', 'Dior 迪奧']
+  };
+
+  function renderBrandChips(){
+    var chipsEl = document.getElementById('brand-chips');
+    chipsEl.innerHTML = '';
+    BRAND_CHIPS[currentCategory].forEach(function(name){
+      var btn = document.createElement('button');
+      btn.className = 'chip';
+      btn.type = 'button';
+      btn.textContent = name;
+      btn.addEventListener('click', function(){
+        document.getElementById('brand-input').value = name;
+        runBrandQuery();
+      });
+      chipsEl.appendChild(btn);
+    });
+    document.getElementById('brand-info').hidden = true;
+    document.getElementById('brand-error-box').hidden = true;
+    document.getElementById('brand-input').value = '';
+  }
+
+  function findBrandMatch(query){
+    var q = query.trim();
+    if(!q) return null;
+    var names = BRAND_NAMES[currentCategory];
+    var exact = names.filter(function(n){ return n === q; });
+    if(exact.length) return exact[0];
+    var starts = names.filter(function(n){ return n.toLowerCase().indexOf(q.toLowerCase()) === 0 || q.indexOf(n) === 0; });
+    if(starts.length) return starts[0];
+    var includes = names.filter(function(n){ return n.toLowerCase().indexOf(q.toLowerCase()) !== -1; });
+    if(includes.length) return includes[0];
+    return null;
+  }
+
+  /* ===== 呼叫 Claude API（含 web_search）即時查詢品牌定位／價格／代表商品 ===== */
+  function callClaudeWithSearch(prompt){
+    // 注意：這裡打的是自己網站底下的 Netlify Function（/.netlify/functions/gemini-proxy），
+    // 不是直接打外部AI服務商的網址。金鑰放在 Netlify 環境變數裡，由 function 代為轉送請求並啟用即時網路搜尋。
+    return fetch('/.netlify/functions/gemini-proxy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: [{ role: 'user', content: prompt }]
+      })
+    }).then(function(res){
+      return res.json().then(function(data){
+        if(!res.ok){ throw new Error((data && data.error) || ('代理伺服器回應狀態 ' + res.status)); }
+        return data;
+      });
+    }).then(function(data){
+      var text = (data.content || []).map(function(item){ return item.type === 'text' ? item.text : ''; }).join('\n');
+      var clean = text.replace(/```json|```/g, '').trim();
+      var firstBrace = clean.indexOf('{');
+      var lastBrace = clean.lastIndexOf('}');
+      if(firstBrace === -1 || lastBrace === -1){ throw new Error('回應格式無法解析'); }
+      return JSON.parse(clean.slice(firstBrace, lastBrace + 1));
+    });
+  }
+
+  function nowStamp(){
+    var d = new Date();
+    return d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate() + ' ' + ('0'+d.getHours()).slice(-2) + ':' + ('0'+d.getMinutes()).slice(-2);
+  }
+
+  function runBrandQuery(){
+    var q = document.getElementById('brand-input').value.trim();
+    var errBox = document.getElementById('brand-error-box');
+    var infoBox = document.getElementById('brand-info');
+    if(!q){ errBox.textContent = '請輸入品牌名稱，或點下面的快速按鈕。'; errBox.hidden = false; infoBox.hidden = true; return; }
+    var matchName = findBrandMatch(q);
+    if(!matchName){
+      var allNames = BRAND_NAMES[currentCategory].join('、');
+      errBox.textContent = '在「' + CATEGORY_LABEL[currentCategory] + '」分類裡沒有找到「' + q + '」。這個分類目前收錄的品牌：' + allNames + '。';
+      errBox.hidden = false;
+      infoBox.hidden = true;
+      return;
+    }
+    errBox.hidden = true;
+
+    if(typeof BRAND_STATIC !== 'undefined' && BRAND_STATIC[matchName]){
+      renderStaticBrandInfo(matchName, BRAND_STATIC[matchName]);
+      addToHistory('brand', currentCategory, matchName);
+      return;
+    }
+
+    infoBox.hidden = true;
+    showBrandLoading();
+
+    var prompt = '請搜尋台灣市場目前「' + matchName + '」這個' + CATEGORY_LABEL[currentCategory] + '品牌的現況，並只回傳一個 JSON 物件（不要有任何其他文字、不要markdown），格式如下：' +
+      '{"tier":"價格定位區間，例如 NT$700-1,600","desc":"一句話品牌定位描述（繁體中文，約25-40字）","flagship":[{"n":"代表商品名稱","p":"目前約略售價，例如 NT$700-900","reason":"1-2句推薦理由，具體說明適合誰或解決什麼需求（繁體中文，約25-50字，避免空泛行銷話術，說明具體族群或使用情境）","subcat":"子分類標籤"}]}' +
+      ' 價格請以台灣常見零售通路（屈臣氏、康是美、寶雅、momo、PChome、百貨專櫃等）目前實際售價為準。flagship 請提供 4-6 個該品牌目前仍在販售的代表商品，產品必須真實存在、符合品牌定位；每個商品的 subcat 請從以下標籤中擇一填入：' + SUBCATS[currentCategory].join('、') + '。';
+
+    callClaudeWithSearch(prompt).then(function(result){
+      renderBrandInfo(matchName, result);
+      addToHistory('brand', currentCategory, matchName);
+    }).catch(function(err){
+      renderBrandError(err);
+    });
+  }
+
+  function showBrandLoading(){
+    var infoBox = document.getElementById('brand-info');
+    infoBox.innerHTML = '<div class="loading-box"><span class="spinner"></span><span>正在即時查詢「' + document.getElementById('brand-input').value.trim() + '」目前的市場行情…</span></div>';
+    infoBox.hidden = false;
+  }
+
+  function renderBrandError(err){
+    var infoBox = document.getElementById('brand-info');
+    infoBox.innerHTML = '<div class="live-error">即時查詢失敗，可能是網路問題或查詢逾時，請稍後再試一次。<br><button class="btn btn-primary" id="brand-retry-btn" type="button">重新查詢</button></div>';
+    infoBox.hidden = false;
+    document.getElementById('brand-retry-btn').addEventListener('click', runBrandQuery);
+  }
+
+  function renderBrandInfo(matchName, brand){
+    var infoBox = document.getElementById('brand-info');
+    infoBox.innerHTML =
+      '<span class="live-tag"><span class="dot"></span>即時查詢結果</span>' +
+      '<p class="brand-tier" id="brand-tier"></p>' +
+      '<p class="brand-desc" id="brand-desc"></p>' +
+      '<p class="brand-flagship-title">代表商品（目前約略行情）</p>' +
+      '<div id="brand-flagship-list"></div>' +
+      '<p class="live-stamp">查詢時間：' + nowStamp() + '；實際售價請以購買當下通路標示為準</p>';
+    document.getElementById('brand-tier').textContent = brand.tier || '價格區間查詢失敗';
+    document.getElementById('brand-desc').textContent = brand.desc || '';
+    var list = document.getElementById('brand-flagship-list');
+    list.innerHTML = '';
+    (brand.flagship || []).forEach(function(f){
+      var item = document.createElement('div');
+      item.className = 'flagship-item';
+      var head = document.createElement('div');
+      head.className = 'flagship-item-head';
+      var nameEl = document.createElement('span');
+      nameEl.className = 'flagship-item-name';
+      nameEl.textContent = f.n;
+      var priceEl = document.createElement('span');
+      priceEl.className = 'flagship-item-price';
+      priceEl.textContent = f.p;
+      head.appendChild(nameEl);
+      head.appendChild(priceEl);
+      if(f.subcat){
+        var subcatEl = document.createElement('span');
+        subcatEl.className = 'flagship-subcat';
+        subcatEl.textContent = f.subcat;
+        head.appendChild(subcatEl);
+      }
+      item.appendChild(head);
+      if(f.reason){
+        var reasonEl = document.createElement('p');
+        reasonEl.className = 'flagship-reason';
+        reasonEl.textContent = f.reason;
+        item.appendChild(reasonEl);
+      }
+      list.appendChild(item);
+    });
+    infoBox.hidden = false;
+  }
+
+  function renderStaticBrandInfo(matchName, brandData){
+    var infoBox = document.getElementById('brand-info');
+    infoBox.innerHTML =
+      '<span class="static-tag">預載資料庫</span>' +
+      '<p class="brand-flagship-title">代表商品</p>' +
+      '<div id="brand-flagship-list"></div>';
+    var list = document.getElementById('brand-flagship-list');
+    (brandData.products || []).forEach(function(p){
+      var item = document.createElement('div');
+      item.className = 'flagship-item';
+      var head = document.createElement('div');
+      head.className = 'flagship-item-head';
+      var nameEl = document.createElement('span');
+      nameEl.className = 'flagship-item-name';
+      nameEl.textContent = p.name;
+      head.appendChild(nameEl);
+      if(p.subcatTag){
+        var subcatEl = document.createElement('span');
+        subcatEl.className = 'flagship-subcat';
+        subcatEl.textContent = p.subcatTag;
+        head.appendChild(subcatEl);
+      }
+      item.appendChild(head);
+      if(p.ingredients && p.ingredients.length){
+        var ingEl = document.createElement('p');
+        ingEl.className = 'flagship-meta';
+        ingEl.innerHTML = '<span class="flagship-meta-label">主要成分</span>' + p.ingredients.join('、');
+        item.appendChild(ingEl);
+      }
+      if(p.suitableFor && p.suitableFor.length){
+        var suitEl = document.createElement('p');
+        suitEl.className = 'flagship-meta';
+        suitEl.innerHTML = '<span class="flagship-meta-label">適合族群</span>' + p.suitableFor.join('、');
+        item.appendChild(suitEl);
+      }
+      if(p.reason){
+        var reasonEl = document.createElement('p');
+        reasonEl.className = 'flagship-reason';
+        reasonEl.textContent = p.reason;
+        item.appendChild(reasonEl);
+      }
+      list.appendChild(item);
+    });
+    infoBox.hidden = false;
+  }
+
+  document.getElementById('brand-search-btn').addEventListener('click', runBrandQuery);
+  document.getElementById('brand-input').addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); runBrandQuery(); }
+  });
+
+  /* ===== 依預算找產品（全部分類，即時查詢） ===== */
+  function renderBudgetItem(item){
+    var div = document.createElement('div');
+    div.className = 'budget-item';
+
+    var title = document.createElement('p');
+    title.className = 'budget-item-title';
+    title.textContent = item.brand + ' — ' + item.product;
+
+    var price = document.createElement('p');
+    price.className = 'budget-item-price';
+    price.textContent = '參考價 ' + item.price;
+
+    var reason = document.createElement('p');
+    reason.className = 'budget-item-reason';
+    reason.textContent = '推薦原因：' + item.reason;
+
+    var searchTerm = item.brand + ' ' + item.product;
+    var platforms = [
+      { name: 'momo', url: 'https://www.momoshop.com.tw/search/' + encodeURIComponent(searchTerm) },
+      { name: 'PChome', url: 'https://ecshweb.pchome.com.tw/search/v3.3/?q=' + encodeURIComponent(searchTerm) },
+      { name: '蝦皮', url: 'https://shopee.tw/search?keyword=' + encodeURIComponent(searchTerm) },
+      { name: '淘寶', url: 'https://s.taobao.com/search?q=' + encodeURIComponent(searchTerm) }
+    ];
+    var linksContainer = document.createElement('div');
+    linksContainer.className = 'budget-item-links';
+    platforms.forEach(function(p){
+      var a = document.createElement('a');
+      a.className = 'budget-item-link';
+      a.href = p.url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.textContent = p.name + ' →';
+      linksContainer.appendChild(a);
+    });
+
+    div.appendChild(title);
+    div.appendChild(price);
+    if(item.subcat){
+      var subcatEl = document.createElement('span');
+      subcatEl.className = 'budget-item-subcat';
+      subcatEl.textContent = item.subcat;
+      div.appendChild(subcatEl);
+    }
+    div.appendChild(reason);
+    div.appendChild(linksContainer);
+    return div;
+  }
+
+  function runBudgetQuery(){
+    var budget = parseFloat(document.getElementById('budget-input').value);
+    var keyword = document.getElementById('budget-keyword').value.trim();
+    var errBox = document.getElementById('budget-error-box');
+    var resultsEl = document.getElementById('budget-results');
+    resultsEl.innerHTML = '';
+    errBox.hidden = true;
+
+    if(!budget || budget <= 0){
+      errBox.textContent = '請先輸入大於 0 的預算金額。';
+      errBox.hidden = false;
+      return;
+    }
+
+    resultsEl.innerHTML = '<div class="loading-box"><span class="spinner"></span><span>正在即時查詢符合預算 NT$' + budget + ' 的' + CATEGORY_LABEL[currentCategory] + '商品…</span></div>';
+
+    var brandList = BRAND_NAMES[currentCategory].join('、');
+    var prompt = '請搜尋台灣市場目前的' + CATEGORY_LABEL[currentCategory] + '商品，從以下品牌中挑出 3-5 個，價格大約落在 NT$' + budget + ' 以內' +
+      (keyword ? '，且產品類型符合「' + keyword + '」' : '') +
+      '的代表性商品：' + brandList + '。只回傳一個 JSON 物件（不要有任何其他文字、不要markdown），格式如下：' +
+      '{"items":[{"brand":"品牌名稱","product":"商品名稱","price":"目前約略售價，例如 NT$350-450","reason":"一句話推薦原因（繁體中文，約20-35字，說明為何符合預算與需求）","subcat":"子分類標籤"}]}' +
+      ' subcat 請從以下標籤中擇一：' + SUBCATS[currentCategory].join('、') + '。' +
+      ' 若清單中沒有任何符合預算' + (keyword ? '或符合該關鍵字' : '') + '的商品，請回傳 {"items":[]}。';
+
+    callClaudeWithSearch(prompt).then(function(result){
+      var items = result.items || [];
+      resultsEl.innerHTML = '';
+      if(!items.length){
+        errBox.textContent = '在「' + CATEGORY_LABEL[currentCategory] + '」分類裡，預算 NT$' + budget + ' 內' +
+          (keyword ? '、符合「' + keyword + '」' : '') + ' 沒有找到符合的商品。可以試著提高預算，或換個關鍵字／清空關鍵字再試一次。';
+        errBox.hidden = false;
+        return;
+      }
+      items.forEach(function(item){
+        resultsEl.appendChild(renderBudgetItem(item));
+      });
+      var stamp = document.createElement('p');
+      stamp.className = 'source-note';
+      stamp.textContent = '查詢時間：' + nowStamp() + '；以上由 AI 即時查詢整理，實際售價請以購買當下通路標示為準。';
+      resultsEl.appendChild(stamp);
+    }).catch(function(err){
+      resultsEl.innerHTML = '<div class="live-error">即時查詢失敗，可能是網路問題或查詢逾時，請稍後再試一次。<br><button class="btn btn-primary" id="budget-retry-btn" type="button">重新查詢</button></div>';
+      document.getElementById('budget-retry-btn').addEventListener('click', runBudgetQuery);
+    });
+  }
+
+  document.getElementById('budget-search-btn').addEventListener('click', runBudgetQuery);
+  document.getElementById('budget-keyword').addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); runBudgetQuery(); }
+  });
+  document.getElementById('budget-input').addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); runBudgetQuery(); }
+  });
+
+  /* ===== 專業選色推薦（僅化妝品類別） ===== */
+  var UNDERTONE_COLOR = {
+    lipstick: {
+      warm:'珊瑚橘、磚紅、豆沙橘色系——跟黃皮膚色調和，顯白又不顯黃。',
+      cool:'正紅、桃紅、紫莓色系——能襯托粉皮的冷白感。',
+      neutral:'裸粉、玫瑰木色系——幾乎不會出錯，安全牌。',
+      olive:'磚紅、深橘、可可色系——比粉嫩色更顯氣色。',
+      unsure:'先從裸感豆沙色開始試，這個色系對大多數膚色調都友善。'
+    },
+    blush: {
+      warm:'橘色系、蜜桃色腮紅——跟暖膚色最搭。',
+      cool:'粉色系、玫瑰色腮紅——襯托冷白肌。',
+      neutral:'裸粉橘色系——自然不突兀。',
+      olive:'陶土色、磚橘色腮紅——比正粉色更顯氣色。',
+      unsure:'先試蜜桃色，是接受度最廣的選擇。'
+    },
+    eyeshadow: {
+      warm:'大地色、金棕色眼影——溫暖色調更服貼。',
+      cool:'灰紫色、藍紫色系眼影——冷色調更襯眼睛。',
+      neutral:'香檳色、中性棕色眼影——怎麼搭都安全。',
+      olive:'橄欖綠、古銅色眼影——呼應膚色裡的黃綠調。',
+      unsure:'從大地色開始嘗試，最不容易出錯。'
+    }
+  };
+  var DEPTH_COLOR = {
+    fair:'挑粉底建議從淺色系開始試色，很多品牌最淺號可能還是偏深，建議在臉頰與下顎交界處比色。',
+    medium:'選擇範圍最廣，建議同時比較兩個相近色號，挑微調出最自然的一個。',
+    deep:'部分開架品牌深色系選擇較少，建議優先考慮色號選擇較豐富的品牌（如NARS、M.A.C這類專業彩妝品牌色號通常較齊全）。'
+  };
+  var TEXTURE_BY_SKINTYPE = {
+    foundation: { dry:'保濕光澤型，質地偏水潤，避免霧面控油型讓乾肌更顯乾燥脫屑。', oily:'控油霧光型，能延長持妝、減少出油暗沉的問題。', combo:'可以分區使用，或選擇中庸的水潤霧光型粉底。', sensitive:'選無香精、無酒精的低敏配方，新色號先在下顎測試。' },
+    lipstick: { dry:'滋潤型唇膏為主，避免長效不沾杯配方讓唇紋更明顯。', oily:'一般膚質不太影響唇膏選擇，可以依顯色度跟持久度自由挑。', combo:'乾性或油性的建議都適用，依個人偏好調整。', sensitive:'避免薄荷涼感配方，挑選前可對照過敏問卷裡的「化妝品色料」標記。' },
+    blush: { dry:'霜狀、液狀腮紅比粉狀更服貼不顯乾。', oily:'粉狀腮紅顯色持久度較好，但要注意刷具清潔避免長痘。', combo:'兩種質地都可以，依上妝部位調整。', sensitive:'避開含香精的腮紅，敏感肌膚較容易因摩擦泛紅。' },
+    eyeshadow: { dry:'霜狀或帶保濕配方的眼影較不容易卡眼皮細紋。', oily:'霧面眼影比珠光更不容易在出油後顯得花妝。', combo:'兩種質地都可以嘗試。', sensitive:'避免飛粉嚴重的珠光眼影，極敏感眼周建議先做局部測試。' },
+    mascara: { dry:'選含保養成分的滋潤型睫毛膏，避免過度乾燥卡屑。', oily:'選防水抗暈型，避免出油融妝後睫毛膏暈染。', combo:'可選持久防水基礎款，兼顧兩種需求。', sensitive:'極敏感眼周建議選眼科測試過的低敏配方，且務必留意開封後3-6個月內用完。' },
+    cleansingoil: { dry:'選滋潤型卸妝油，卸妝同時兼顧保濕，避免卸後緊繃。', oily:'選清爽型卸妝油，卸後盡快二次清潔避免悶痘。', combo:'可選中度清爽型，T字加強按摩卸除。', sensitive:'避免含過多礦物油或香精的卸妝油，卸除動作要輕柔。' }
+  };
+  var OCCASION_ADVICE = {
+    foundation: { daily:'選輕透型粉底，遮瑕到位但不厚重。', date:'可疊加局部遮瑕加強完美度，搭配打亮提升氣色。', formal:'選持久型粉底，確保整天不脫妝。', bold:'可以嘗試平常不敢選的妝效，如水光、霧面。' },
+    lipstick: { daily:'選自然色號，豆沙、裸粉都很適合通勤。', date:'可選稍微提亮氣色的珊瑚或桃色系。', formal:'選顯色但不過度誇張的色號，正紅或磚紅都很適合正式場合。', bold:'大膽嘗試飽和度高的紫色、深色系，唇膏是最低風險的玩色入門。' },
+    blush: { daily:'輕薄一層提氣色就好，避免過度厚重。', date:'可以加強一點，讓氣色更明顯。', formal:'保持自然，避免搶了整體妝感焦點。', bold:'可以嘗試漸層腮紅或不對稱腮紅手法。' },
+    eyeshadow: { daily:'單色大地色輕刷眼摺就好，簡單快速。', date:'可以加一點珠光提亮眼頭眼尾。', formal:'選霧面自然色系，避免過度閃粉顯得不正式。', bold:'嘗試多色漸層或鮮豔色系，眼影是玩色的好入口。' },
+    mascara: { daily:'自然纖長款，根部加強就好。', date:'可以選濃密款，讓眼神更有電力。', formal:'選防水抗暈款，確保整天精神。', bold:'可以嘗試彩色睫毛膏（藍、棕、紫）增加層次。' },
+    cleansingoil: { daily:'一般卸妝油即可，重點卸除眼唇妝。', date:'留意是否上了防水妝，需加強卸除眼唇部位。', formal:'正式場合通常妝感較重，建議選卸妝力較強的款式。', bold:'濃妝或特效妝後建議分兩次卸除，先卸大面積再細節清潔。' }
+  };
+  var PRODUCT_LABEL = { foundation:'粉底液', lipstick:'唇膏', blush:'腮紅', eyeshadow:'眼影', mascara:'睫毛膏', cleansingoil:'卸妝油' };
+  var PRODUCT_BRAND_REC = {
+    foundation: { budget:'媚比琳 Maybelline', premium:'NARS' },
+    lipstick: { budget:'ROMAND', premium:'YSL 聖羅蘭' },
+    blush: { budget:'CANMAKE', premium:'NARS' },
+    eyeshadow: { budget:'KATE', premium:'NARS' },
+    mascara: { budget:'KISSME', premium:'植村秀 Shu Uemura' },
+    cleansingoil: { budget:'蜜妮 Biore（保養品類別）', premium:'植村秀 Shu Uemura' }
+  };
+
+  document.getElementById('adv-submit-btn').addEventListener('click', function(){
+    var undertone = document.getElementById('adv-undertone').value;
+    var depth = document.getElementById('adv-depth').value;
+    var skintype = document.getElementById('adv-skintype').value;
+    var product = document.getElementById('adv-product').value;
+    var occasion = document.getElementById('adv-occasion').value;
+
+    var colorHtml;
+    if(product === 'foundation'){
+      colorHtml = '<p>' + DEPTH_COLOR[depth] + '</p>';
+    } else if(product === 'mascara'){
+      colorHtml = '<p>睫毛膏色號選擇較少，主要是黑色／棕色：棕色更適合淡妝或偏黃膚色調，黑色顯色度更強、更適合濃妝。</p>';
+    } else if(product === 'cleansingoil'){
+      colorHtml = '<p>卸妝油沒有色號選擇的問題，可以直接看右側的質地建議。</p>';
+    } else {
+      colorHtml = '<p>' + UNDERTONE_COLOR[product][undertone] + '</p>';
+    }
+
+    document.getElementById('adv-r-color').innerHTML = colorHtml;
+    document.getElementById('adv-r-texture').innerHTML = '<p>' + TEXTURE_BY_SKINTYPE[product][skintype] + '</p>';
+    document.getElementById('adv-r-occasion').innerHTML = '<p>' + OCCASION_ADVICE[product][occasion] + '</p>';
+
+    var brandRec = PRODUCT_BRAND_REC[product];
+    var brandHtml = '<ul><li>小資選擇：' + brandRec.budget + '</li><li>進階選擇：' + brandRec.premium + '</li></ul>';
+    document.getElementById('adv-r-brand').innerHTML = brandHtml;
+
+    document.getElementById('adv-result').hidden = false;
+  });
+
+
+  document.querySelectorAll('.sub-tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      document.querySelectorAll('.sub-tab').forEach(function(t){ t.classList.toggle('active', t === tab); });
+      var mode = tab.dataset.mode;
+      document.getElementById('ingredient-mode').hidden = mode !== 'ingredient';
+      document.getElementById('brand-mode').hidden = mode !== 'brand';
+      document.getElementById('budget-mode').hidden = mode !== 'budget';
+      document.getElementById('advisor-mode').hidden = mode !== 'advisor';
+    });
+  });
+
+  function buildChipMap(){
+    var map = {};
+    Object.keys(DB).forEach(function(cat){
+      Object.keys(DB[cat]).forEach(function(name){
+        map[name] = cat;
+      });
+    });
+    return map;
+  }
+  var ALL_ITEMS = buildChipMap();
+
+  function renderChips(){
+    var chipsEl = document.getElementById('chips');
+    chipsEl.innerHTML = '';
+    Object.keys(DB[currentCategory]).forEach(function(name){
+      var btn = document.createElement('button');
+      btn.className = 'chip';
+      btn.type = 'button';
+      btn.textContent = name;
+      btn.addEventListener('click', function(){
+        textInput.value = name;
+        runQuery();
+      });
+      chipsEl.appendChild(btn);
+    });
+  }
+
+  function selectCategory(cat){
+    currentCategory = cat;
+    document.querySelectorAll('.cat-tab').forEach(function(tab){
+      tab.classList.toggle('active', tab.dataset.cat === cat);
+    });
+    textInput.placeholder = CATEGORY_PLACEHOLDER[cat];
+    renderChips();
+    renderBrandChips();
+    document.getElementById('budget-results').innerHTML = '';
+    document.getElementById('budget-error-box').hidden = true;
+    document.getElementById('budget-input').value = '';
+    document.getElementById('budget-keyword').value = '';
+
+    var advisorTab = document.getElementById('advisor-tab');
+    advisorTab.hidden = cat !== 'cosmetic';
+    if(cat !== 'cosmetic' && advisorTab.classList.contains('active')){
+      document.querySelector('.sub-tab[data-mode="ingredient"]').click();
+    }
+  }
+
+  /* ===== 過敏風險評估問卷 ===== */
+  var ALLERGEN_MAP = {
+    fragrance: { label:'香精／香料（Fragrance、Parfum、Linalool、Limonene）', note:'保養品中最常見的接觸性致敏原之一' },
+    alcohol: { label:'變性酒精（Alcohol Denat.）', note:'高濃度收斂／控油成分常造成刺痛、乾燥' },
+    acids: { label:'果酸（AHA）、水楊酸（BHA）、A醇（Retinol）', note:'屬刺激性成分而非典型過敏原，建議從低濃度漸進使用' },
+    oil: { label:'植物精油（Tea Tree、Lavender 等 Essential Oil）', note:'天然不代表不致敏，精油是常見接觸性致敏原' },
+    dye: { label:'對苯二胺（PPD）相關染料成分', note:'染髮過敏者，部分保養品色料可能有交叉反應風險' },
+    metal: { label:'鎳（Nickel）等金屬微量成分', note:'較少見，但部分彩妝／染色成分仍可能含微量金屬' },
+    cosmetic_dye: { label:'化妝品色料／染色劇（如 CI 色素編號、Red 27、Yellow 5 等 Lake 染料）', note:'彩妝類常見的接觸性致敏來源，唇膏與眼部彩妝風險較高' },
+    preservative: { label:'防腐劑類（MIT/MCI、Methylisothiazolinone、Paraben類）', note:'異位性膚質對這類防腐劑相對較敏感' },
+    rosacea_general: { label:'高濃度酒精、薄荷醇（Menthol）、酸類、香精', note:'酒糟肌容易因這類刺激性成分誘發泛紅潮紅' }
+  };
+
+  function computeAllergyFlags(){
+    var flags = [];
+    function add(k){ if(flags.indexOf(k) === -1) flags.push(k); }
+    document.querySelectorAll('input[name="q1"]:checked').forEach(function(el){
+      if(el.value === 'atopic'){ add('preservative'); add('fragrance'); }
+      if(el.value === 'rosacea'){ add('rosacea_general'); }
+      if(el.value === 'contact'){ add('fragrance'); add('preservative'); }
+    });
+    document.querySelectorAll('input[name="q2"]:checked').forEach(function(el){
+      if(ALLERGEN_MAP[el.value]){ add(el.value); }
+    });
+    return flags;
+  }
+
+  function saveAllergyAnswers(){
+    var answers = { q1:[], q2:[], q3:'', q4:'' };
+    document.querySelectorAll('input[name="q1"]:checked').forEach(function(el){ answers.q1.push(el.value); });
+    document.querySelectorAll('input[name="q2"]:checked').forEach(function(el){ answers.q2.push(el.value); });
+    var q3 = document.querySelector('input[name="q3"]:checked');
+    if(q3){ answers.q3 = q3.value; }
+    var q4 = document.querySelector('input[name="q4"]:checked');
+    if(q4){ answers.q4 = q4.value; }
+    try{ localStorage.setItem('mm_allergy_answers', JSON.stringify(answers)); }catch(e){}
+  }
+
+  function restoreAllergyAnswers(){
+    try{
+      var raw = localStorage.getItem('mm_allergy_answers');
+      if(!raw) return;
+      var answers = JSON.parse(raw);
+      (answers.q1 || []).forEach(function(v){
+        var el = document.querySelector('input[name="q1"][value="' + v + '"]');
+        if(el){ el.checked = true; }
+      });
+      (answers.q2 || []).forEach(function(v){
+        var el = document.querySelector('input[name="q2"][value="' + v + '"]');
+        if(el){ el.checked = true; }
+      });
+      if(answers.q3){
+        var el3 = document.querySelector('input[name="q3"][value="' + answers.q3 + '"]');
+        if(el3){ el3.checked = true; }
+      }
+      if(answers.q4){
+        var el4 = document.querySelector('input[name="q4"][value="' + answers.q4 + '"]');
+        if(el4){ el4.checked = true; }
+      }
+    }catch(e){}
+  }
+
+  function updateAllergySummary(flags){
+    var el = document.getElementById('allergy-summary-text');
+    el.textContent = (flags && flags.length) ? ('已記錄 ' + flags.length + ' 項可能風險成分方向') : '還沒填寫過敏風險評估';
+  }
+
+  function renderAllergyResult(flags){
+    var listEl = document.getElementById('allergy-result-list');
+    listEl.innerHTML = '';
+    if(!flags.length){
+      listEl.innerHTML = '<li>目前回答看不出明顯風險方向，但仍建議任何新產品先做貼膚測試。</li>';
+    } else {
+      flags.forEach(function(key){
+        var item = ALLERGEN_MAP[key];
+        var li = document.createElement('li');
+        li.innerHTML = '<strong>' + item.label + '</strong> — ' + item.note;
+        listEl.appendChild(li);
+      });
+    }
+    document.getElementById('allergy-result').hidden = false;
+  }
+
+  document.getElementById('allergy-toggle-btn').addEventListener('click', function(){
+    var form = document.getElementById('allergy-form');
+    form.hidden = !form.hidden;
+    this.textContent = form.hidden ? '填寫問卷 ▾' : '收起 ▴';
+  });
+
+  document.getElementById('allergy-submit-btn').addEventListener('click', function(){
+    saveAllergyAnswers();
+    var flags = computeAllergyFlags();
+    try{ localStorage.setItem('mm_allergy_flags', JSON.stringify(flags)); }catch(e){}
+    renderAllergyResult(flags);
+    updateAllergySummary(flags);
+  });
+
+  /* ===== 查詢與結果顯示 ===== */
+  var textInput = document.getElementById('text-input');
+  var searchBtn = document.getElementById('search-btn');
+  var errorBox = document.getElementById('error-box');
+  var resultsEl = document.getElementById('results');
+  var warnBox = document.getElementById('warn-box');
+
+  function showError(msg){ errorBox.textContent = msg; errorBox.hidden = false; }
+  function hideError(){ errorBox.hidden = true; }
+
+  function listToHtml(arr){
+    if(!arr || !arr.length){ return '<p>暫無資料</p>'; }
+    return '<ul>' + arr.map(function(i){ return '<li>' + i + '</li>'; }).join('') + '</ul>';
+  }
+
+  var EN_ALIAS = {
+    'omega-3':'魚油','omega3':'魚油','fish oil':'魚油','fishoil':'魚油','epa':'魚油','dha':'魚油',
+    'probiotic':'益生菌','probiotics':'益生菌','lactobacillus':'益生菌',
+    'vitamin b':'B群','vitamin b complex':'B群','b complex':'B群','b-complex':'B群',
+    'vitamin d':'維生素D','vitamin d3':'維生素D','vit d':'維生素D',
+    'lutein':'葉黃素',
+    'collagen':'膠原蛋白',
+    'hyaluronic acid':'玻尿酸','hyaluronate':'玻尿酸','ha serum':'玻尿酸',
+    'vitamin c':'維生素C','ascorbic acid':'維生素C','vit c':'維生素C',
+    'retinol':'A醇','vitamin a':'A醇','vit a':'A醇',
+    'niacinamide':'菸鹼醯胺','nicotinamide':'菸鹼醯胺','vitamin b3':'菸鹼醯胺','vit b3':'菸鹼醯胺',
+    'peptide':'勝肽','peptides':'勝肽','matrixyl':'勝肽',
+    'aha':'果酸','glycolic acid':'果酸','lactic acid':'果酸','alpha hydroxy':'果酸',
+    'foundation':'粉底液','liquid foundation':'粉底液',
+    'lipstick':'唇膏','lip color':'唇膏',
+    'mascara':'睫毛膏',
+    'blush':'腮紅','blusher':'腮紅',
+    'eyeshadow':'眼影','eye shadow':'眼影',
+    'cleansing oil':'卸妝油','makeup remover':'卸妝油'
+  };
+
+  function findMatch(query){
+    var q = query.trim();
+    if(!q) return null;
+    var alias = EN_ALIAS[q.toLowerCase()];
+    if(alias){ q = alias; }
+    var names = Object.keys(ALL_ITEMS);
+    var exact = names.filter(function(n){ return n === q; });
+    if(exact.length) return exact[0];
+    var starts = names.filter(function(n){ return n.indexOf(q) === 0 || q.indexOf(n) === 0; });
+    if(starts.length) return starts[0];
+    var includes = names.filter(function(n){ return n.indexOf(q) !== -1 || q.indexOf(n) !== -1; });
+    if(includes.length) return includes[0];
+    return null;
+  }
+
+  function runQuery(){
+    var q = textInput.value.trim();
+    if(!q){ showError('請輸入想查詢的成分或產品名稱，或點下面的快速按鈕。'); return; }
+    var matchName = findMatch(q);
+    if(!matchName){
+      var allNames = Object.keys(ALL_ITEMS).join('、');
+      showError('目前資料庫裡沒有「' + q + '」。目前收錄的項目：' + allNames + '。可以換個關鍵字，或直接點下面的快速按鈕試試。');
+      resultsEl.hidden = true;
+      resultsEl.classList.remove('show');
+      return;
+    }
+    hideError();
+    var cat = ALL_ITEMS[matchName];
+    if(cat !== currentCategory){ selectCategory(cat); }
+    var item = DB[cat][matchName];
+
+    document.getElementById('r-cat-badge').textContent = CATEGORY_LABEL[cat];
+    document.getElementById('r-id').textContent = matchName;
+    document.getElementById('r-en-name').textContent = item.en;
+    document.getElementById('r-pros').innerHTML = listToHtml(item.pros);
+    document.getElementById('r-cons').innerHTML = listToHtml(item.cons);
+    document.getElementById('r-suitable').innerHTML = listToHtml(item.suitable);
+    document.getElementById('r-price').innerHTML = '<p>' + item.price + '</p>';
+    document.getElementById('r-reviews').innerHTML = '<p>' + item.reviews + '</p>';
+
+    var userFlags = [];
+    try{ userFlags = JSON.parse(localStorage.getItem('mm_allergy_flags') || '[]'); }catch(e){}
+    var overlap = (item.riskTags || []).filter(function(t){ return userFlags.indexOf(t) !== -1; });
+    if(overlap.length){
+      var labels = overlap.map(function(t){ return ALLERGEN_MAP[t] ? ALLERGEN_MAP[t].label : t; });
+      warnBox.innerHTML = '⚠️ 根據你填寫的過敏風險評估，這個項目可能含有你標記的風險方向：' + labels.join('、') + '，建議特別留意或先做貼膚測試。';
+      warnBox.hidden = false;
+    } else {
+      warnBox.hidden = true;
+    }
+
+    resultsEl.hidden = false;
+    requestAnimationFrame(function(){ resultsEl.classList.add('show'); });
+    addToHistory('ingredient', cat, matchName);
+  }
+
+  document.querySelectorAll('.cat-tab').forEach(function(tab){
+    tab.addEventListener('click', function(){ selectCategory(tab.dataset.cat); });
+  });
+  searchBtn.addEventListener('click', runQuery);
+  textInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); runQuery(); }
+  });
+
+  restoreAllergyAnswers();
+  try{
+    var savedFlags = JSON.parse(localStorage.getItem('mm_allergy_flags') || '[]');
+    updateAllergySummary(savedFlags);
+  }catch(e){}
+  renderChips();
+  renderBrandChips();
+  renderHistory();
+})();
+</script>
+</body>
+</html>
