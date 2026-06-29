@@ -239,6 +239,24 @@ h1{
   border:1px solid rgba(139,115,150,0.2);border-radius:10px;padding:10px 14px;
 }
 
+.symptom-group{margin-bottom:20px;}
+.symptom-group-label{font-family:var(--font-display);font-size:13px;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;margin:0 0 10px;}
+.symptom-checks{display:flex;flex-direction:column;gap:8px;}
+.symptom-check{display:flex;align-items:center;gap:9px;font-size:16px;color:var(--ink);cursor:pointer;}
+.symptom-check input{accent-color:var(--pink);width:16px;height:16px;flex-shrink:0;}
+.symptom-note-label{font-family:var(--font-display);font-size:13px;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;margin:18px 0 8px;}
+.symptom-textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-family:var(--font-body);font-size:16px;color:var(--ink);background:#fbfdfb;resize:vertical;min-height:76px;box-sizing:border-box;}
+.symptom-textarea:focus{outline:none;border-color:var(--pink-light);box-shadow:0 0 0 3px rgba(169,118,58,0.15);}
+.symptom-results{margin-top:18px;}
+.symptom-item{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px;transition:transform .2s ease,box-shadow .2s ease;}
+.symptom-item:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(74,58,40,0.08);}
+.symptom-item-meta{display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap;}
+.symptom-item-brand{font-size:13px;color:var(--muted);font-family:var(--font-display);}
+.symptom-item-cat{font-size:12px;background:rgba(169,118,58,0.1);color:var(--pink);border-radius:999px;padding:2px 9px;font-family:var(--font-display);}
+.symptom-item-name{font-family:var(--font-display);font-weight:600;font-size:16.5px;margin:0 0 8px;color:var(--ink);}
+.symptom-item-why{font-size:15.5px;color:var(--muted);line-height:1.6;margin:0;}
+.symptom-disclaimer{margin-top:14px;font-size:14px;color:var(--muted);background:rgba(139,115,150,0.06);border:1px solid rgba(139,115,150,0.2);border-radius:10px;padding:10px 14px;}
+
 @media (max-width:520px){
   .wrap{padding:26px 16px 48px;}
   .panel{padding:18px;}
@@ -342,6 +360,7 @@ h1{
       <button class="sub-tab active" data-mode="ingredient" type="button">依成分查詢</button>
       <button class="sub-tab" data-mode="brand" type="button">依品牌瀏覽</button>
       <button class="sub-tab" data-mode="budget" type="button">依預算找產品</button>
+      <button class="sub-tab" data-mode="symptom" type="button">依症狀推薦</button>
       <button class="sub-tab" data-mode="advisor" id="advisor-tab" type="button" hidden>專業選色推薦</button>
     </div>
 
@@ -388,6 +407,45 @@ h1{
       <div class="error-box" id="budget-error-box" hidden></div>
       <div class="budget-results" id="budget-results"></div>
       <p class="db-note" id="budget-live-stamp">以上 4 個通路連結（momo、PChome、蝦皮、淘寶）均為搜尋結果頁，不是商品詳情頁，不保證每個平台都有現貨；由 AI 即時查詢整理，實際售價以各平台當下標示為準。</p>
+    </div>
+
+    <div id="symptom-mode" hidden>
+      <p class="method-label">勾選你的症狀或膚況，AI 會從資料庫裡幫你挑選最適合的商品（僅限保健食品 + 保養品）</p>
+      <div class="symptom-group">
+        <p class="symptom-group-label">💊 身體感受（保健食品）</p>
+        <div class="symptom-checks">
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="容易疲勞、提不起勁"> 容易疲勞、提不起勁</label>
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="消化不良、腸胃不適、排便不順"> 消化不良、腸胃不適、排便不順</label>
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="長時間用眼、眼睛容易疲勞"> 長時間用眼、眼睛容易疲勞</label>
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="關節不適、有骨骼保養需求"> 關節不適、有骨骼保養需求</label>
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="免疫力偏低、容易感冒生病"> 免疫力偏低、容易感冒生病</label>
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="睡眠品質差、容易失眠或多夢"> 睡眠品質差、容易失眠或多夢</label>
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="壓力大、情緒容易緊繃焦慮"> 壓力大、情緒容易緊繃焦慮</label>
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="掉髮、髮絲稀疏或缺乏光澤"> 掉髮、髮絲稀疏或缺乏光澤</label>
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="生理期不適、有經前症候群困擾"> 生理期不適、有經前症候群困擾</label>
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="需要心血管或血液循環日常保養"> 需要心血管或血液循環日常保養</label>
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="飲食不均衡、想補充綜合維生素或礦物質"> 飲食不均衡、想補充綜合維生素或礦物質</label>
+        </div>
+      </div>
+      <div class="symptom-group">
+        <p class="symptom-group-label">🧴 肌膚困擾（保養品）</p>
+        <div class="symptom-checks">
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="皮膚乾燥、緊繃缺水"> 皮膚乾燥、緊繃缺水</label>
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="容易出油、毛孔粗大"> 容易出油、毛孔粗大</label>
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="肌膚敏感、容易泛紅或刺激反應"> 肌膚敏感、容易泛紅或刺激反應</label>
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="長痘痘、有粉刺困擾"> 長痘痘、有粉刺困擾</label>
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="膚色暗沉不均、想提亮"> 膚色暗沉不均、想提亮</label>
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="肌膚鬆弛、有細紋或初老煩惱"> 肌膚鬆弛、有細紋或初老煩惱</label>
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="黑眼圈或眼周浮腫困擾"> 黑眼圈或眼周浮腫困擾</label>
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="曬後修復、有色素沉澱或曬斑困擾"> 曬後修復、有色素沉澱或曬斑困擾</label>
+          <label class="symptom-check"><input class="symptom-check-input" type="checkbox" data-label="唇部乾燥脫皮、需要唇部集中護理"> 唇部乾燥脫皮、需要唇部集中護理</label>
+        </div>
+      </div>
+      <p class="symptom-note-label">補充說明（選填）</p>
+      <textarea id="symptom-freetext" class="symptom-textarea" placeholder="例如：皮膚白天出油晚上很乾、最近換季特別敏感又有消化不好的問題..."></textarea>
+      <button class="btn btn-primary" id="symptom-submit-btn" type="button" style="margin-top:14px;">幫我找最適合的商品</button>
+      <div class="error-box" id="symptom-error-box" hidden></div>
+      <div class="symptom-results" id="symptom-results"></div>
     </div>
 
     <div id="advisor-mode" hidden>
@@ -1156,6 +1214,7 @@ h1{
       document.getElementById('ingredient-mode').hidden = mode !== 'ingredient';
       document.getElementById('brand-mode').hidden = mode !== 'brand';
       document.getElementById('budget-mode').hidden = mode !== 'budget';
+      document.getElementById('symptom-mode').hidden = mode !== 'symptom';
       document.getElementById('advisor-mode').hidden = mode !== 'advisor';
     });
   });
@@ -1403,6 +1462,99 @@ h1{
   textInput.addEventListener('keydown', function(e){
     if(e.key === 'Enter'){ e.preventDefault(); runQuery(); }
   });
+
+  /* ===== 依症狀推薦 ===== */
+  function buildProductListForAI(){
+    if(typeof BRAND_STATIC === 'undefined'){ return '[]'; }
+    var list = [];
+    Object.keys(BRAND_STATIC).forEach(function(brand){
+      var b = BRAND_STATIC[brand];
+      if(b.category !== 'supplement' && b.category !== 'skincare'){ return; }
+      (b.products || []).forEach(function(p){
+        list.push({
+          brand: brand,
+          category: b.category === 'supplement' ? '保健食品' : '保養品',
+          name: p.name,
+          subcatTag: p.subcatTag || '',
+          ingredients: (p.ingredients || []).join('、'),
+          suitableFor: (p.suitableFor || []).join('；'),
+          reason: p.reason || ''
+        });
+      });
+    });
+    return JSON.stringify(list);
+  }
+
+  function runSymptomQuery(){
+    var checked = [];
+    document.querySelectorAll('.symptom-check-input:checked').forEach(function(el){
+      checked.push(el.dataset.label);
+    });
+    var freeText = document.getElementById('symptom-freetext').value.trim();
+    var errBox = document.getElementById('symptom-error-box');
+    var resultsEl = document.getElementById('symptom-results');
+
+    if(!checked.length && !freeText){
+      errBox.textContent = '請至少勾選一個症狀，或在補充說明欄位描述你的狀況。';
+      errBox.hidden = false;
+      return;
+    }
+    errBox.hidden = true;
+    resultsEl.innerHTML = '<div class="loading-box"><span class="spinner"></span><span>正在根據你的狀況，從資料庫比對最適合的商品…</span></div>';
+
+    var needDesc = checked.join('、') + (freeText ? ('；補充說明：' + freeText) : '');
+    var productList = buildProductListForAI();
+
+    var prompt = '使用者描述的症狀或膚況：「' + needDesc + '」。\n\n' +
+      '以下是可供推薦的商品清單（JSON格式），你只能從這份清單中挑選，不可推薦或編造任何清單以外的商品：\n' +
+      productList + '\n\n' +
+      '請從以上清單中挑選 3 到 5 支最適合此使用者的商品。針對「為何特別適合這位使用者目前的狀況」寫出個人化推薦理由——要具體說明這個人的症狀和商品特性的對應關係，不要只是複述商品固定描述。\n' +
+      '只回傳一個 JSON 物件（不要任何其他文字或 markdown），格式：\n' +
+      '{"picks":[{"brand":"品牌名稱（需和清單完全一致）","name":"商品名稱（需和清單完全一致）","category":"保健食品或保養品","why":"針對此使用者的個人化推薦理由（繁體中文，40-80字）"}]}';
+
+    callClaudeWithSearch(prompt).then(function(result){
+      var picks = result.picks || [];
+      resultsEl.innerHTML = '';
+      if(!picks.length){
+        errBox.textContent = '這次沒有找到非常吻合的商品，試著調整或增加勾選的症狀再試。';
+        errBox.hidden = false;
+        return;
+      }
+      picks.forEach(function(pick){
+        var div = document.createElement('div');
+        div.className = 'symptom-item';
+        var meta = document.createElement('div');
+        meta.className = 'symptom-item-meta';
+        var brandEl = document.createElement('span');
+        brandEl.className = 'symptom-item-brand';
+        brandEl.textContent = pick.brand;
+        var catEl = document.createElement('span');
+        catEl.className = 'symptom-item-cat';
+        catEl.textContent = pick.category || '';
+        meta.appendChild(brandEl);
+        meta.appendChild(catEl);
+        var nameEl = document.createElement('p');
+        nameEl.className = 'symptom-item-name';
+        nameEl.textContent = pick.name;
+        var whyEl = document.createElement('p');
+        whyEl.className = 'symptom-item-why';
+        whyEl.textContent = pick.why;
+        div.appendChild(meta);
+        div.appendChild(nameEl);
+        div.appendChild(whyEl);
+        resultsEl.appendChild(div);
+      });
+      var disclaimer = document.createElement('p');
+      disclaimer.className = 'symptom-disclaimer';
+      disclaimer.textContent = '以上為 AI 根據您填寫的內容，從資料庫中篩選的參考建議，非醫療診斷；實際選購前建議諮詢醫師或藥師，過敏體質或特殊健康狀況請特別留意。';
+      resultsEl.appendChild(disclaimer);
+    }).catch(function(){
+      resultsEl.innerHTML = '<div class="live-error">查詢失敗，請稍後再試一次。<br><button class="btn btn-primary" id="symptom-retry-btn" type="button">重新查詢</button></div>';
+      document.getElementById('symptom-retry-btn').addEventListener('click', runSymptomQuery);
+    });
+  }
+
+  document.getElementById('symptom-submit-btn').addEventListener('click', runSymptomQuery);
 
   restoreAllergyAnswers();
   try{
