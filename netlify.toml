@@ -1,9 +1,0 @@
-# Netlify 設定檔
-# 告訴 Netlify 去哪裡找 serverless functions
-
-[build]
-  functions = "netlify/functions"
-  publish = "."
-
-[functions]
-  node_bundler = "esbuild"
