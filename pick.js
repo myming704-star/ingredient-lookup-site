@@ -145,6 +145,8 @@
     var t = norm(token);
     if(!t){ return null; }
     for(var j = 0; j < ALIAS.length; j++){ if(ALIAS[j].n === t){ return PICK_INGS[ALIAS[j].i]; } }
+    var byCode = matchCode(token);
+    if(byCode){ return byCode; }
     for(j = 0; j < ALIAS.length; j++){
       var a = ALIAS[j].n;
       if(a.length < 2){ continue; }
@@ -153,6 +155,21 @@
       if(t.indexOf(a) !== -1){ return PICK_INGS[ALIAS[j].i]; }
     }
     return null;
+  }
+  /* 代號（E330、CI 77891、VC…）：有對應成分就用那個成分，沒有就當一般成分顯示代號名稱 */
+  var CODE_ING = {};
+  function matchCode(token){
+    if(typeof window.lookupCode !== 'function'){ return null; }
+    var hits = window.lookupCode(token);
+    if(!hits.length){ return null; }
+    var c = hits[0];
+    if(c.pk){
+      for(var i = 0; i < PICK_INGS.length; i++){ if(PICK_INGS[i].k === c.pk){ return PICK_INGS[i]; } }
+    }
+    if(!CODE_ING[c.c]){
+      CODE_ING[c.c] = { k: c.zh + '（' + c.c + '）', a: [], n: c.n, warn: c.w ? { sensitive: c.w } : undefined };
+    }
+    return CODE_ING[c.c];
   }
   function splitTokens(raw){
     return raw.split(/[,，、;；\n\r\/／]+/).map(function(s){ return s.trim(); }).filter(function(s){ return s; });
