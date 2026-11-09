@@ -449,6 +449,16 @@ textarea.text-field{resize:vertical;min-height:110px;width:100%;}
   .code-row{grid-template-columns:auto 1fr;gap:2px 10px;}
   .code-row-use,.code-row-note{grid-column:1/-1;}
 }
+
+/* ===== 成分搜尋建議 ===== */
+.ing-suggest{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.ing-sug-title{flex-basis:100%;margin:0 0 2px;font-size:13.5px;font-weight:700;color:var(--gold);}
+.ing-sug{display:inline-flex;align-items:baseline;gap:6px;flex-wrap:wrap;max-width:100%;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:6px 11px;font:inherit;font-size:14.5px;cursor:pointer;text-align:left;}
+.ing-sug:hover,.ing-sug:focus-visible{border-color:var(--accent);outline:none;}
+.ing-sug b{font-weight:700;}
+.ing-sug-sub{font-family:var(--font-mono);font-size:12.5px;color:var(--accent);overflow-wrap:anywhere;}
+.ing-sug-tag{font-size:11.5px;color:var(--muted);background:rgba(45,45,45,0.06);border-radius:999px;padding:1px 7px;}
+.pick-sug-sub{margin-left:5px;font-family:var(--font-mono);font-size:11.5px;opacity:.8;}
 </style>
 </head>
 <body>
@@ -576,11 +586,12 @@ textarea.text-field{resize:vertical;min-height:110px;width:100%;}
     </div>
 
     <div id="ingredient-mode">
-      <p class="method-label">輸入成分、產品名稱或代號（E330、CI 77891、VC、BHA 都可以）</p>
+      <p class="method-label">輸入中文、英文前幾個字母（nia、hya）或研究簡稱（NAM、SA、EPA），會跳出選項</p>
       <div class="input-row">
         <input type="text" id="text-input" class="text-field" placeholder="例如：魚油、B群、XX 益生菌...">
         <button class="btn btn-primary" id="search-btn" type="button">查詢</button>
       </div>
+      <div id="ing-suggest" class="ing-suggest" hidden></div>
       <div id="code-result" class="code-result" hidden aria-live="polite"></div>
       <div class="chips" id="chips"></div>
     </div>
@@ -664,11 +675,12 @@ textarea.text-field{resize:vertical;min-height:110px;width:100%;}
     </div>
 
     <div id="brand-mode" hidden>
-      <p class="method-label">輸入品牌名稱，AI 會即時列出 15-20 個目前仍在販售的代表商品（只會搜尋目前這個分類）</p>
+      <p class="method-label">輸入品牌的中文或英文（打一部分就好，例如：理膚、cerave、drwu），看資料庫收錄的代表商品</p>
       <div class="input-row">
         <input type="text" id="brand-input" class="text-field" placeholder="例如：DR.WU、白蘭氏、媚比琳...">
         <button class="btn btn-primary" id="brand-search-btn" type="button">查詢</button>
       </div>
+      <div id="brand-suggest" class="ing-suggest" hidden></div>
       <div class="chips" id="brand-chips"></div>
       <div class="error-box" id="brand-error-box" hidden></div>
       <div id="brand-info" hidden></div>
@@ -785,7 +797,7 @@ textarea.text-field{resize:vertical;min-height:110px;width:100%;}
       <p class="method-label">在店裡拿起保養品，把成分表打進來，依你的膚質直接告訴你適不適合，最多比較 3 瓶</p>
       <div class="pick-card" id="pick-profile"></div>
       <div class="pick-card">
-        <div class="pick-prof-head"><span class="pick-step">2</span><div class="pick-prof-title"><b>這瓶的成分</b><span class="pick-prof-sum">看包裝背面「全成分」，照順序打前 5～8 個就夠；中文、英文都可以，打前幾個字會跳出選項</span></div></div>
+        <div class="pick-prof-head"><span class="pick-step">2</span><div class="pick-prof-title"><b>這瓶的成分</b><span class="pick-prof-sum">看包裝背面「全成分」，照順序打前 5～8 個就夠；中文、英文前幾個字母（nia）、研究簡稱（NAM、SA、TXA）都可以，會跳出選項</span></div></div>
         <div class="adv-grid" style="margin:12px 0 10px;">
           <div class="adv-field"><label class="adv-label" for="pick-name">商品名稱（可不填）</label><input type="text" id="pick-name" class="text-field" placeholder="例如：A 牌修護乳液"></div>
           <div class="adv-field"><label class="adv-label" for="pick-type">種類</label><select id="pick-type"></select></div>
@@ -5736,19 +5748,67 @@ var CHANNEL_STATIC = {
   }
 
   var lastBrandItems = [];
+  /* 品牌模糊比對：忽略大小寫、空格、標點；中文或英文打一部分都可以 */
+  var BRAND_ALIAS = { lrp:'理膚寶水 La Roche-Posay', sk2:'SK-II', tbs:'美體小舖 The Body Shop' };
+  function brandKey(s){ return String(s).toLowerCase().replace(/[！-～]/g, function(ch){ return String.fromCharCode(ch.charCodeAt(0) - 0xFEE0); }).replace(/[\s.\-_'’·&、,，]/g, ''); }
+  function findBrands(q){
+    var k = brandKey(q);
+    if(!k){ return []; }
+    var names = Object.keys(BRAND_STATIC);
+    if(BRAND_ALIAS[k] && BRAND_STATIC[BRAND_ALIAS[k]]){ return [BRAND_ALIAS[k]]; }
+    var exact = names.filter(function(n){ return brandKey(n) === k || n.split(/\s+/).some(function(part){ return brandKey(part) === k; }); });
+    if(exact.length){ return exact; }
+    var starts = names.filter(function(n){ return brandKey(n).indexOf(k) === 0 || n.split(/\s+/).some(function(part){ return brandKey(part).indexOf(k) === 0; }); });
+    if(starts.length){ return starts; }
+    return names.filter(function(n){ return brandKey(n).indexOf(k) !== -1; });
+  }
+  function showBrandSuggest(list, title){
+    var box = document.getElementById('brand-suggest');
+    clear(box);
+    if(!list.length){ box.hidden = true; return; }
+    if(title){ box.appendChild(el('p', 'ing-sug-title', title)); }
+    list.slice(0, 10).forEach(function(n){
+      var b = el('button', 'ing-sug');
+      b.type = 'button';
+      b.appendChild(el('b', '', n));
+      var cat = BRAND_STATIC[n].category;
+      b.appendChild(el('span', 'ing-sug-tag', CATEGORY_LABEL[cat] || ''));
+      b.addEventListener('click', function(){ document.getElementById('brand-input').value = n; box.hidden = true; runBrandQuery(); });
+      box.appendChild(b);
+    });
+    box.hidden = false;
+  }
+  document.getElementById('brand-input').addEventListener('input', function(){
+    document.getElementById('brand-error-box').hidden = true;
+    var v = this.value.trim();
+    var list = v ? findBrands(v) : [];
+    if(list.length === 1 && list[0] === v){ list = []; }
+    showBrandSuggest(list);
+  });
+
   function runBrandQuery(){
     var q = document.getElementById('brand-input').value.trim();
     var errBox = document.getElementById('brand-error-box');
     var infoBox = document.getElementById('brand-info');
     if(!q){ errBox.textContent = '請輸入品牌名稱，或點下面的快速按鈕。'; errBox.hidden = false; infoBox.hidden = true; return; }
 
-    var entry = BRAND_STATIC[q];
-    if(!entry){
-      errBox.textContent = '資料庫目前還沒有「' + q + '」的資料，之後會陸續新增更多品牌。';
+    var found = findBrands(q);
+    if(found.length > 1 && !BRAND_STATIC[q]){
+      errBox.hidden = true;
+      showBrandSuggest(found, '找到 ' + found.length + ' 個品牌，點一個：');
+      infoBox.hidden = true;
+      return;
+    }
+    if(!found.length){
+      errBox.textContent = '資料庫目前還沒有「' + q + '」。可以打品牌的一部分（例如「理膚」「cerave」），或點下面的品牌按鈕。';
       errBox.hidden = false;
       infoBox.hidden = true;
       return;
     }
+    q = BRAND_STATIC[q] ? q : found[0];
+    document.getElementById('brand-input').value = q;
+    document.getElementById('brand-suggest').hidden = true;
+    var entry = BRAND_STATIC[q];
     errBox.hidden = true;
 
     var brand = {
@@ -7292,6 +7352,15 @@ var CHANNEL_STATIC = {
     return null;
   }
 
+  function showPickInfo(ing, typed){
+    var box = document.getElementById('code-result');
+    window.__pick.renderInfo(box, ing, typed);
+    box.hidden = false;
+    hideError();
+    resultsEl.hidden = true;
+    resultsEl.classList.remove('show');
+  }
+
   function runQuery(){
     var q = textInput.value.trim();
     if(!q){ showError('請輸入想查詢的成分或產品名稱，或點下面的快速按鈕。'); return; }
@@ -7307,6 +7376,20 @@ var CHANNEL_STATIC = {
       q = codeDb;
     } else {
       codeBox.hidden = true;
+      var P = window.__pick;
+      var exactName = ALL_ITEMS[q] ? q : (EN_ALIAS[q.toLowerCase()] || '');
+      if(!exactName){
+        var pe = P ? P.matchExact(q) : null;
+        if(pe && ALL_ITEMS[pe.k]){ q = pe.k; }
+        else if(pe){ showPickInfo(pe, q); return; }
+        else if(!findMatch(q)){
+          var sr = window.__ingSearch ? window.__ingSearch.search(q, 1)[0] : null;
+          if(sr && sr.score <= 2){ textInput.value = sr.go; runQuery(); return; }
+          var pm = P ? P.match(q) : null;
+          if(pm && ALL_ITEMS[pm.k]){ q = pm.k; }
+          else if(pm){ showPickInfo(pm, q); return; }
+        }
+      }
     }
     var matchName = findMatch(q);
     if(!matchName){
@@ -7356,7 +7439,8 @@ var CHANNEL_STATIC = {
     document.querySelector('.sub-tab[data-mode="ingredient"]').click();
     textInput.value = q;
     runQuery();
-    document.getElementById('code-result').scrollIntoView({ behavior:'smooth', block:'start' });
+    var cb = document.getElementById('code-result');
+    (cb.hidden ? resultsEl : cb).scrollIntoView({ behavior:'smooth', block:'start' });
   };
   textInput.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); runQuery(); } });
 
@@ -7370,9 +7454,21 @@ var CHANNEL_STATIC = {
   renderHotEmptyState();
   renderIngredientTable();
   syncHotCategory();
+  window.__ingDB = { DB: DB, ALL_ITEMS: ALL_ITEMS, EN_ALIAS: EN_ALIAS };
 })();
 </script>
 <script src="codes.js"></script>
 <script src="pick.js"></script>
+<script src="search.js"></script>
+<script>
+  // 「依成分查詢」打字建議：中文、英文開頭、研究簡稱
+  (function(){
+    var inp = document.getElementById('text-input'), box = document.getElementById('ing-suggest');
+    if(!inp || !window.__ingSearch){ return; }
+    var s = window.__ingSearch.attach(inp, box, function(r){ window.__ingQuery(r.go); });
+    document.getElementById('search-btn').addEventListener('click', s.hide);
+    inp.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ s.hide(); } });
+  })();
+</script>
 </body>
 </html>

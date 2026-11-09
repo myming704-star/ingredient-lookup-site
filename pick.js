@@ -138,6 +138,18 @@
 
   var ALIAS = [];
   PICK_INGS.forEach(function(ing, i){ ing.a.forEach(function(a){ ALIAS.push({ n: norm(a), i: i, raw: a }); }); });
+  // 研究簡稱與代號（NAM、SA、TXA、CI 77891…，資料在 codes.js）也當成別名
+  (window.INGREDIENT_CODES || []).forEach(function(c){
+    if(!c.pk){ return; }
+    var i = -1;
+    for(var x = 0; x < PICK_INGS.length; x++){ if(PICK_INGS[x].k === c.pk){ i = x; break; } }
+    if(i < 0){ return; }
+    [c.c].concat(c.alt).forEach(function(a){
+      var n = norm(a);
+      ALIAS.push({ n: n, i: i, raw: a, code: 1 });
+      if(n.indexOf('-') !== -1){ ALIAS.push({ n: n.replace(/-/g, ''), i: i, raw: a, code: 1 }); }
+    });
+  });
   ALIAS.sort(function(x, y){ return y.n.length - x.n.length; });
 
   /* 比對：完全相同優先，再找「這個成分名稱裡含有的最長別名」 */
@@ -162,7 +174,8 @@
     if(typeof window.lookupCode !== 'function'){ return null; }
     var hits = window.lookupCode(token);
     if(!hits.length){ return null; }
-    var c = hits[0];
+    // 同一個縮寫有多種意思時，店內挑選優先用保養品、化妝品的意思
+    var c = hits.filter(function(h){ return h.pk; })[0] || hits.filter(function(h){ return /[kc]/.test(h.at); })[0] || hits[0];
     if(c.pk){
       for(var i = 0; i < PICK_INGS.length; i++){ if(PICK_INGS[i].k === c.pk){ return PICK_INGS[i]; } }
     }
@@ -312,6 +325,47 @@
   }
   function saveProfile(){ store('mm_pick_profile', profile); renderProfile(); renderLive(); if(lastResult){ runPick(true); } renderCompare(); }
 
+  /* 打字建議：完全相同 → 開頭相同（英文前幾個字母、簡稱）→ 中間含有 */
+  function suggestFor(text, max){
+    var q = norm(text);
+    if(!q){ return []; }
+    var ascii = /^[a-z0-9\-,]+$/.test(q);
+    if(ascii && q.length < 2){ return []; }
+    var best = {};
+    ALIAS.forEach(function(a){
+      var sc = a.n === q ? 0 : a.n.indexOf(q) === 0 ? 1 : (q.length >= (ascii ? 4 : 1) && a.n.indexOf(q) !== -1) ? 2 : -1;
+      if(sc < 0){ return; }
+      var ing = PICK_INGS[a.i], cur = best[ing.k];
+      if(!cur || sc < cur.sc || (sc === cur.sc && a.n.length < norm(cur.raw).length)){ best[ing.k] = { ing: ing, sc: sc, raw: a.raw }; }
+    });
+    return Object.keys(best).map(function(k){ return best[k]; })
+      .sort(function(x, y){ return x.sc - y.sc || norm(x.raw).length - norm(y.raw).length; })
+      .slice(0, max || 8);
+  }
+
+  /* 單一成分說明卡（給「依成分查詢」查不到完整資料時用） */
+  var FIT_TEXT = { dry:'乾性肌', oily:'油性肌', sensitive:'敏感肌', acne:'痘痘肌' };
+  function renderInfo(container, ing, typed){
+    container.textContent = '';
+    var card = mk('div', 'code-card');
+    var top = mk('div', 'code-card-top');
+    top.appendChild(mk('span', 'code-type', '🧴 保養品成分'));
+    if(typed && norm(typed) !== norm(ing.k)){ top.appendChild(mk('span', 'code-badge mono', typed)); }
+    card.appendChild(top);
+    card.appendChild(mk('div', 'code-card-name', ing.k));
+    var d = mk('div', 'code-detail');
+    if(ing.g && ing.g.length){ d.appendChild(mk('div', 'code-detail-use', '功效：' + ing.g.join('、'))); }
+    d.appendChild(mk('p', 'code-detail-note', ing.n));
+    if(ing.fit && ing.fit.length){ d.appendChild(mk('div', 'code-detail-where', '特別適合：' + ing.fit.map(function(f){ return FIT_TEXT[f]; }).join('、'))); }
+    var en = (ing.a || []).filter(function(a){ return /^[a-z0-9 ,.\-\/]+$/i.test(a) && a.length > 4; })[0];
+    if(en){ d.appendChild(mk('div', 'code-detail-en mono', en)); }
+    var w = ing.warn || {};
+    Object.keys(w).forEach(function(k){ d.appendChild(mk('p', 'code-warn', '⚠️ ' + (FIT_TEXT[k] || k) + '：' + w[k])); });
+    card.appendChild(d);
+    container.appendChild(card);
+    container.appendChild(mk('p', 'code-foot', '想知道這瓶整體適不適合你，到「🛒 店內挑選」把成分表打進去。'));
+  }
+
   /* 輸入時即時把認得的成分標顏色，並提示可能的成分名稱 */
   function renderLive(){
     var input = $('pick-input'), live = $('pick-live'), sug = $('pick-suggest');
@@ -330,18 +384,12 @@
     var last = input.value.split(/[,，、;；\n\r\/／]/).pop().trim();
     var q = norm(last);
     if(q.length >= 1 && !/[,，、]\s*$/.test(input.value)){
-      var seen = {}, list = [];
-      for(var j = ALIAS.length - 1; j >= 0 && list.length < 6; j--){
-        var a = ALIAS[j];
-        if(a.n.indexOf(q) === 0 || (q.length >= 2 && a.n.indexOf(q) !== -1)){
-          var ing = PICK_INGS[a.i];
-          if(seen[ing.k]){ continue; }
-          seen[ing.k] = 1; list.push(ing);
-        }
-      }
-      if(list.length && !(list.length === 1 && norm(list[0].k) === q)){
-        list.forEach(function(ing){
+      var list = suggestFor(last, 8);
+      if(list.length && !(list.length === 1 && norm(list[0].ing.k) === q)){
+        list.forEach(function(it){
+          var ing = it.ing;
           var b = mk('button', 'pick-sug', ing.k);
+          if(it.raw && norm(it.raw) !== norm(ing.k)){ b.appendChild(mk('small', 'pick-sug-sub', it.raw)); }
           b.type = 'button';
           b.addEventListener('click', function(){
             var v = input.value, idx = Math.max(v.lastIndexOf(','), v.lastIndexOf('，'), v.lastIndexOf('、'), v.lastIndexOf('\n'));
@@ -504,5 +552,10 @@
   if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', init); } else { init(); }
 
   // 給測試用
-  window.__pick = { match: match, evaluate: evaluate, setProfile: function(p){ profile = p; } };
+  function matchExact(token){
+    var t = norm(token);
+    for(var j = 0; j < ALIAS.length; j++){ if(ALIAS[j].n === t){ return PICK_INGS[ALIAS[j].i]; } }
+    return null;
+  }
+  window.__pick = { match: match, matchExact: matchExact, suggest: suggestFor, renderInfo: renderInfo, ings: PICK_INGS, evaluate: evaluate, setProfile: function(p){ profile = p; } };
 })();
