@@ -348,6 +348,69 @@ textarea.text-field{resize:vertical;min-height:110px;width:100%;}
   .wrap{padding:56px 16px 48px;}
   .panel{padding:18px;}
 }
+
+/* ===== 店內挑選 ===== */
+.pick-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px;}
+.pick-prof-head{display:flex;align-items:flex-start;gap:12px;}
+.pick-step{flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;font-weight:900;display:grid;place-items:center;font-size:15px;}
+.pick-prof-title{flex:1;min-width:0;display:grid;gap:2px;}
+.pick-prof-title b{font-size:17px;}
+.pick-prof-sum{font-size:14px;color:var(--muted);overflow-wrap:anywhere;}
+.pick-prof-body{display:grid;gap:8px;margin-top:12px;}
+.pick-prof-body .adv-label{margin:6px 0 0;}
+.pick-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.pick-chip{border:1.5px solid var(--line);background:var(--card-alt);border-radius:999px;padding:7px 14px;font:inherit;font-size:15px;cursor:pointer;color:var(--ink);}
+.pick-chip.on{border-color:var(--accent);background:rgba(224,92,53,0.1);color:var(--accent);font-weight:700;}
+.pick-link{border:0;background:none;color:var(--muted);text-decoration:underline;text-underline-offset:3px;font:inherit;font-size:14px;cursor:pointer;padding:4px 2px;}
+.pick-link:hover{color:var(--accent);}
+.pick-hint{font-size:13.5px;color:var(--muted);margin:8px 0 0;line-height:1.6;}
+.pick-suggest{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.pick-suggest:empty{display:none;}
+.pick-sug{border:1px dashed var(--accent);background:transparent;color:var(--accent);border-radius:999px;padding:4px 12px;font:inherit;font-size:14px;cursor:pointer;}
+.pick-live{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.pick-live:empty{display:none;}
+.pick-tag{font-size:13px;padding:2px 10px;border-radius:999px;border:1px solid var(--line);}
+.pick-tag.good{background:rgba(92,138,90,0.14);border-color:rgba(92,138,90,0.4);}
+.pick-tag.bad{background:rgba(193,67,46,0.12);border-color:rgba(193,67,46,0.45);}
+.pick-tag.unk{color:var(--muted);border-style:dashed;}
+.pick-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px;}
+.pick-score{display:flex;gap:16px;align-items:center;padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:12px;}
+.pick-ring{--p:0;--c:var(--muted);flex:none;width:78px;height:78px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--c) calc(var(--p) * 1%), rgba(45,45,45,0.08) 0);position:relative;}
+.pick-ring::before{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--card);}
+.pick-ring span{position:relative;font-size:24px;font-weight:500;}
+.pick-score.ok .pick-ring{--c:var(--green);} .pick-score.mid .pick-ring{--c:var(--yellow);}
+.pick-score.meh .pick-ring{--c:var(--gold);} .pick-score.no .pick-ring{--c:var(--red);}
+.pick-name-out{margin:0;font-size:13.5px;color:var(--muted);}
+.pick-verdict{margin:0;font-size:22px;font-weight:900;}
+.pick-score.ok .pick-verdict{color:var(--green);} .pick-score.no .pick-verdict{color:var(--red);}
+.pick-sum{margin:2px 0 0;font-size:14.5px;}
+.pick-sec{margin-bottom:12px;}
+.pick-sec-title{font-weight:700;margin:0 0 6px;}
+.pick-empty{margin:0;font-size:14px;color:var(--muted);}
+.pick-list{list-style:none;margin:0;padding:0;display:grid;gap:8px;}
+.pick-row{border-radius:10px;padding:9px 12px;background:var(--card-alt);border-left:4px solid var(--line);}
+.pick-row.good{border-left-color:var(--green);} .pick-row.bad{border-left-color:var(--red);}
+.pick-row-top{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;}
+.pick-orig{font-size:13px;color:var(--muted);}
+.pick-pos{margin-left:auto;font-size:12.5px;color:var(--muted);font-family:var(--font-mono);}
+.pick-why{margin:3px 0 0;font-size:14.5px;font-weight:700;}
+.pick-row.bad .pick-why{color:var(--red);} .pick-row.good .pick-why{color:var(--green);}
+.pick-note{margin:2px 0 0;font-size:13.5px;color:var(--muted);}
+.pick-more{margin:4px 0 8px;}
+.pick-more summary{cursor:pointer;font-size:14.5px;color:var(--muted);margin-bottom:8px;}
+.pick-cmp-title{font-weight:900;font-size:17px;margin:0 0 4px;}
+.pick-best{margin:0 0 10px;font-weight:700;color:var(--green);}
+.pick-cmp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:8px;}
+.pick-cmp-card{border:1.5px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:4px;background:var(--card-alt);min-width:0;}
+.pick-cmp-card.best{border-color:var(--green);box-shadow:0 0 0 2px rgba(92,138,90,0.18);}
+.pick-cmp-head{display:flex;justify-content:space-between;gap:8px;align-items:baseline;}
+.pick-cmp-head b{overflow-wrap:anywhere;}
+.pick-cmp-pct{font-weight:500;white-space:nowrap;}
+.pick-cmp-pct.ok{color:var(--green);} .pick-cmp-pct.no{color:var(--red);}
+.pick-cmp-verdict{margin:0;font-size:13.5px;color:var(--muted);}
+.pick-cmp-line{margin:0;font-size:14px;overflow-wrap:anywhere;}
+.pick-cmp-actions{display:flex;gap:12px;}
+#pick-mode select{width:100%;}
 </style>
 </head>
 <body>
@@ -464,12 +527,12 @@ textarea.text-field{resize:vertical;min-height:110px;width:100%;}
 
     <div class="sub-tabs" id="sub-tabs">
       <button class="sub-tab active" data-mode="ingredient" type="button">依成分查詢</button>
+      <button class="sub-tab" data-mode="pick" type="button">🛒 店內挑選</button>
       <button class="sub-tab" data-mode="table" type="button">📋 成分對照表</button>
       <button class="sub-tab" data-mode="brand" type="button">依品牌瀏覽</button>
       <button class="sub-tab" data-mode="hot" type="button">搜尋熱門商品</button>
       <button class="sub-tab" data-mode="symptom" type="button">依症狀推薦</button>
       <button class="sub-tab" data-mode="compat" type="button">成分相容性</button>
-      <button class="sub-tab" data-mode="scan" type="button">產品評估</button>
       <button class="sub-tab" data-mode="concentration" type="button">💧 濃度怎麼選</button>
       <button class="sub-tab" data-mode="advisor" id="advisor-tab" type="button" hidden>專業選色推薦</button>
     </div>
@@ -644,6 +707,28 @@ textarea.text-field{resize:vertical;min-height:110px;width:100%;}
       <button class="btn btn-primary" id="scan-submit-btn" type="button" style="margin-top:12px;">評估這款產品</button>
       <div class="error-box" id="scan-error-box" hidden></div>
       <div id="scan-results"></div>
+    </div>
+
+    <div id="pick-mode" hidden>
+      <p class="method-label">在店裡拿起保養品，把成分表打進來，依你的膚質直接告訴你適不適合，最多比較 3 瓶</p>
+      <div class="pick-card" id="pick-profile"></div>
+      <div class="pick-card">
+        <div class="pick-prof-head"><span class="pick-step">2</span><div class="pick-prof-title"><b>這瓶的成分</b><span class="pick-prof-sum">看包裝背面「全成分」，照順序打前 5～8 個就夠；中文、英文都可以，打前幾個字會跳出選項</span></div></div>
+        <div class="adv-grid" style="margin:12px 0 10px;">
+          <div class="adv-field"><label class="adv-label" for="pick-name">商品名稱（可不填）</label><input type="text" id="pick-name" class="text-field" placeholder="例如：A 牌修護乳液"></div>
+          <div class="adv-field"><label class="adv-label" for="pick-type">種類</label><select id="pick-type"></select></div>
+        </div>
+        <textarea id="pick-input" class="text-field" placeholder="例如：水、甘油、丁二醇、神經醯胺、香料&#10;或：Water, Glycerin, Niacinamide, Fragrance"></textarea>
+        <div class="pick-suggest" id="pick-suggest" aria-label="成分建議"></div>
+        <div class="pick-live" id="pick-live" aria-live="polite"></div>
+        <div class="pick-actions">
+          <button class="btn btn-primary" id="pick-btn" type="button">看適不適合我</button>
+          <button class="pick-link" id="pick-clear" type="button">清空，換下一瓶</button>
+        </div>
+        <div class="error-box" id="pick-error" hidden></div>
+      </div>
+      <div class="pick-card pick-result" id="pick-result" hidden></div>
+      <div class="pick-card" id="pick-compare" hidden></div>
     </div>
 
     <div id="concentration-mode" hidden>
@@ -6916,6 +7001,16 @@ var CHANNEL_STATIC = {
       document.getElementById('scan-mode').hidden = mode !== 'scan';
       document.getElementById('concentration-mode').hidden = mode !== 'concentration';
       document.getElementById('advisor-mode').hidden = mode !== 'advisor';
+      document.getElementById('pick-mode').hidden = mode !== 'pick';
+      // 「依成分查詢」的結果只在那個分頁顯示；切走時先收起來，切回來再放回去
+      var resBox = document.getElementById('results');
+      if(mode !== 'ingredient'){
+        if(!resBox.hidden){ resBox.dataset.keep = '1'; }
+        resBox.hidden = true;
+        document.getElementById('error-box').hidden = true;
+      } else if(resBox.dataset.keep === '1'){
+        resBox.hidden = false;
+      }
     });
   });
 
@@ -6937,8 +7032,17 @@ var CHANNEL_STATIC = {
     });
   }
 
+  function syncHotCategory(){
+    var hc = document.getElementById('hot-category');
+    if(hc && (currentCategory === 'supplement' || currentCategory === 'skincare') && hc.value !== currentCategory){
+      hc.value = currentCategory;
+      if(typeof hotSearched !== 'undefined' && hotSearched){ runHotSearch(); }
+    }
+  }
+
   function selectCategory(cat){
     currentCategory = cat;
+    syncHotCategory();
     document.querySelectorAll('.cat-tab').forEach(function(tab){ tab.classList.toggle('active', tab.dataset.cat === cat); });
     textInput.placeholder = CATEGORY_PLACEHOLDER[cat];
     renderChips();
@@ -7173,7 +7277,9 @@ var CHANNEL_STATIC = {
   renderHistory();
   renderHotEmptyState();
   renderIngredientTable();
+  syncHotCategory();
 })();
 </script>
+<script src="pick.js"></script>
 </body>
 </html>
