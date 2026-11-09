@@ -40,7 +40,8 @@
       });
     }
     (window.INGREDIENT_CODES || []).forEach(function(c){
-      var e = { label:c.zh, kind:'code', code:c, key:base(c.zh), pri:1, go:c.c };
+      // 沒有連到詳細資料的代號，排在保健食品／保養品成分卡後面
+      var e = { label:c.zh, kind:'code', code:c, key:base(c.zh), pri:(c.db || c.pk) ? 1 : 2.5, go:c.c };
       addTerms(terms, e, [c.c, c.zh].concat(c.alt, String(c.en).split(/\s*\/\s*/)));
     });
     var P = window.__pick;
@@ -48,6 +49,14 @@
       P.ings.forEach(function(ing){
         if(ing.base){ return; }
         var e = { label:ing.k, kind:'pick', key:base(ing.k), pri:2, go:ing.k };
+        addTerms(terms, e, [ing.k].concat(ing.a));
+      });
+    }
+    var S = window.__sup;
+    if(S && S.ings){
+      S.ings.forEach(function(ing){
+        if(ing.kind === 'sugar'){ return; }
+        var e = { label:ing.k, kind:'sup', key:base(ing.k), pri:2, go:ing.k };
         addTerms(terms, e, [ing.k].concat(ing.a));
       });
     }
@@ -87,7 +96,7 @@
   function tagOf(r){
     if(r.kind === 'db'){ return CAT[r.cat] || ''; }
     if(r.kind === 'code'){ return r.code.t === 'E' ? '食品添加物' : r.code.t === 'CI' ? '色素' : r.code.t === 'U' ? '標示' : (/s/.test(r.code.at) && !/[kc]/.test(r.code.at) ? '保健食品' : /[kc]/.test(r.code.at) && !/s/.test(r.code.at) ? '保養品' : '簡稱'); }
-    return '保養品成分';
+    return r.kind === 'sup' ? '保健食品成分' : '保養品成分';
   }
 
   /* 在輸入框下方顯示建議 */

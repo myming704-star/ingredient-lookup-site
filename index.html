@@ -459,6 +459,32 @@ textarea.text-field{resize:vertical;min-height:110px;width:100%;}
 .ing-sug-sub{font-family:var(--font-mono);font-size:12.5px;color:var(--accent);overflow-wrap:anywhere;}
 .ing-sug-tag{font-size:11.5px;color:var(--muted);background:rgba(45,45,45,0.06);border-radius:999px;padding:1px 7px;}
 .pick-sug-sub{margin-left:5px;font-family:var(--font-mono);font-size:11.5px;opacity:.8;}
+
+/* ===== 保健食品店內挑選 ===== */
+.sup-checks{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:6px;}
+.sup-checks li{font-size:14.5px;line-height:1.6;background:var(--card-alt);border:1px solid var(--line);border-radius:10px;padding:8px 12px;}
+.sup-checks li.ok{border-color:rgba(92,138,90,.35);color:var(--green);font-weight:700;}
+.pick-why.sup-plus{color:var(--green);}
+.sup-checks li.low{border-color:rgba(193,67,46,.3);color:var(--red);}
+
+/* ===== 品牌商品：適合度、依成分找商品 ===== */
+.bview-toggle{display:flex;gap:6px;margin-bottom:14px;}
+.bview-btn{flex:1;background:var(--card-alt);border:1.5px solid var(--line);border-radius:12px;padding:9px 10px;font-weight:700;font-size:15px;color:var(--muted);cursor:pointer;}
+.bview-btn.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+.fit-badge{font-size:12.5px;font-weight:700;border-radius:999px;padding:2px 9px;white-space:nowrap;background:rgba(45,45,45,0.06);color:var(--ink);}
+.fit-badge.ok{background:rgba(92,138,90,.14);color:var(--green);}
+.fit-badge.mid{background:rgba(169,118,58,.14);color:var(--gold);}
+.fit-badge.no{background:rgba(193,67,46,.12);color:var(--red);}
+.fit-section{background:var(--card-alt);border:1px dashed var(--line);border-radius:10px;padding:10px 12px;}
+.fit-line{margin:4px 0;font-size:14.5px;line-height:1.6;}
+.fit-line.good{color:var(--green);}
+.fit-line.bad{color:var(--red);}
+.fit-note{font-size:13px;color:var(--muted);margin:6px 0 0;line-height:1.6;}
+.fit-actions{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:6px;}
+.fit-add:disabled{color:var(--muted);cursor:default;}
+.ing-tag.hit{background:var(--accent);color:#fff;}
+.bi-head{font-weight:900;font-size:17px;margin:14px 0 4px;}
+.ing-products-link{margin-top:8px;}
 </style>
 </head>
 <body>
@@ -593,6 +619,7 @@ textarea.text-field{resize:vertical;min-height:110px;width:100%;}
       </div>
       <div id="ing-suggest" class="ing-suggest" hidden></div>
       <div id="code-result" class="code-result" hidden aria-live="polite"></div>
+      <div id="ing-products-link" class="ing-products-link" hidden></div>
       <div class="chips" id="chips"></div>
     </div>
 
@@ -675,6 +702,24 @@ textarea.text-field{resize:vertical;min-height:110px;width:100%;}
     </div>
 
     <div id="brand-mode" hidden>
+      <div class="table-view-toggle bview-toggle" role="group" aria-label="找商品的方式">
+        <button class="bview-btn active" data-bview="brand" type="button" aria-pressed="true">🏷️ 依品牌</button>
+        <button class="bview-btn" data-bview="ing" type="button" aria-pressed="false">🔬 依成分找商品</button>
+      </div>
+      <div id="brand-by-ing" hidden>
+        <p class="method-label">打一個成分，列出資料庫 78 個品牌裡含它的商品；設定過膚質或保健需求，會依適合你的程度排序</p>
+        <div class="input-row">
+          <input type="text" id="bi-input" class="text-field" placeholder="例如：神經醯胺、nia、EPA、葉黃素">
+          <button class="btn btn-primary" id="bi-btn" type="button">找商品</button>
+        </div>
+        <div id="bi-suggest" class="ing-suggest" hidden></div>
+        <div class="chips" id="bi-quick">
+          <button class="chip" type="button">神經醯胺</button><button class="chip" type="button">菸鹼醯胺</button><button class="chip" type="button">玻尿酸</button><button class="chip" type="button">傳明酸</button><button class="chip" type="button">水楊酸</button><button class="chip" type="button">魚油</button><button class="chip" type="button">葉黃素</button><button class="chip" type="button">益生菌</button><button class="chip" type="button">維生素D</button>
+        </div>
+        <div class="error-box" id="bi-error" hidden></div>
+        <div id="bi-result"></div>
+      </div>
+      <div id="brand-by-name">
       <p class="method-label">輸入品牌的中文或英文（打一部分就好，例如：理膚、cerave、drwu），看資料庫收錄的代表商品</p>
       <div class="input-row">
         <input type="text" id="brand-input" class="text-field" placeholder="例如：DR.WU、白蘭氏、媚比琳...">
@@ -684,6 +729,7 @@ textarea.text-field{resize:vertical;min-height:110px;width:100%;}
       <div class="chips" id="brand-chips"></div>
       <div class="error-box" id="brand-error-box" hidden></div>
       <div id="brand-info" hidden></div>
+      </div>
     </div>
 
     <div id="hot-mode" hidden>
@@ -794,6 +840,7 @@ textarea.text-field{resize:vertical;min-height:110px;width:100%;}
     </div>
 
     <div id="pick-mode" hidden>
+      <div id="pick-skin-wrap">
       <p class="method-label">在店裡拿起保養品，把成分表打進來，依你的膚質直接告訴你適不適合，最多比較 3 瓶</p>
       <div class="pick-card" id="pick-profile"></div>
       <div class="pick-card">
@@ -813,6 +860,29 @@ textarea.text-field{resize:vertical;min-height:110px;width:100%;}
       </div>
       <div class="pick-card pick-result" id="pick-result" hidden></div>
       <div class="pick-card" id="pick-compare" hidden></div>
+      </div>
+
+      <div id="pick-sup-wrap" hidden>
+        <p class="method-label">在店裡拿起保健食品，把成分和含量打進來，依你想補的方向和身體狀況告訴你適不適合，最多比較 3 罐</p>
+        <div class="pick-card" id="sup-profile"></div>
+        <div class="pick-card">
+          <div class="pick-prof-head"><span class="pick-step">2</span><div class="pick-prof-title"><b>這罐的成分</b><span class="pick-prof-sum">看包裝的「內容物」和「營養標示」：成分照順序打，有寫含量的一起打（EPA 400mg、維生素D3 1000IU、益生菌 100億）；英文、簡稱（EPA、rTG、LGG）都可以</span></div></div>
+          <div class="adv-grid" style="margin:12px 0 10px;">
+            <div class="adv-field"><label class="adv-label" for="sup-name">商品名稱（可不填）</label><input type="text" id="sup-name" class="text-field" placeholder="例如：A 牌魚油"></div>
+            <div class="adv-field"><label class="adv-label" for="sup-type">劑型</label><select id="sup-type"></select></div>
+          </div>
+          <textarea id="sup-input" class="text-field" placeholder="例如：魚油（rTG型）、EPA 400mg、DHA 200mg、維生素E、明膠"></textarea>
+          <div class="pick-suggest" id="sup-suggest" aria-label="成分建議"></div>
+          <div class="pick-live" id="sup-live" aria-live="polite"></div>
+          <div class="pick-actions">
+            <button class="btn btn-primary" id="sup-btn" type="button">看適不適合我</button>
+            <button class="pick-link" id="sup-clear" type="button">清空，換下一罐</button>
+          </div>
+          <div class="error-box" id="sup-error" hidden></div>
+        </div>
+        <div class="pick-card pick-result" id="sup-result" hidden></div>
+        <div class="pick-card" id="sup-compare" hidden></div>
+      </div>
     </div>
 
     <div id="concentration-mode" hidden>
@@ -5652,6 +5722,7 @@ var CHANNEL_STATIC = {
   /* ============================================================
      Feature 1: 依品牌瀏覽
      ============================================================ */
+  window.__buildProductCard = function(item, opts){ return buildProductCard(item, opts); };
   function buildProductCard(item, opts){
     // item: {name, price, subcat, ingredients[], ingredient_reason, suitable_for, reason, caution}
     var card = el('div', 'product-card');
@@ -5683,6 +5754,7 @@ var CHANNEL_STATIC = {
       }
       bodyInner.appendChild(ingSection);
     }
+    if(opts && opts.cat && window.__brandTools){ window.__brandTools.decorate(card, headMain, bodyInner, item, opts); }
     if(item.suitable_for){
       var s1 = el('div', 'product-section');
       s1.appendChild(el('p', 'product-section-label', '適合族群'));
@@ -5814,6 +5886,7 @@ var CHANNEL_STATIC = {
     var brand = {
       flagship: entry.products.map(function(p){
         return {
+          _src: p,
           name: p.name,
           subcat: p.subcatTag,
           ingredients: p.ingredients,
@@ -5882,7 +5955,8 @@ var CHANNEL_STATIC = {
       clear(listEl);
       var items = filter ? lastBrandItems.filter(function(it){ return it.subcat === filter; }) : lastBrandItems;
       if(!items.length){ listEl.appendChild(el('div', 'empty-state', '這個分類篩選下沒有商品。')); return; }
-      items.forEach(function(it){ listEl.appendChild(buildProductCard(it, { buyLinks: brandName + ' ' + it.name })); });
+      var bcat = BRAND_STATIC[brandName] ? BRAND_STATIC[brandName].category : '';
+      items.forEach(function(it){ listEl.appendChild(buildProductCard(it, { buyLinks: brandName + ' ' + it.name, brand: brandName, cat: bcat })); });
     }
     renderList(null);
     filterRow.querySelectorAll('.filter-chip').forEach(function(chip){
@@ -7352,9 +7426,10 @@ var CHANNEL_STATIC = {
     return null;
   }
 
-  function showPickInfo(ing, typed){
+  function showPickInfo(hit, typed){
     var box = document.getElementById('code-result');
-    window.__pick.renderInfo(box, ing, typed);
+    hit.R.renderInfo(box, hit.ing, typed);
+    if(window.__brandTools){ window.__brandTools.linkFor(hit.ing.k.replace(/（.*?）/g, '')); }
     box.hidden = false;
     hideError();
     resultsEl.hidden = true;
@@ -7364,6 +7439,7 @@ var CHANNEL_STATIC = {
   function runQuery(){
     var q = textInput.value.trim();
     if(!q){ showError('請輸入想查詢的成分或產品名稱，或點下面的快速按鈕。'); return; }
+    if(window.__brandTools){ window.__brandTools.linkFor(''); }
     // 先看是不是代號（E330、CI 77891、VC…），是的話先顯示代號卡
     var codeBox = document.getElementById('code-result');
     var codeHits = window.lookupCode ? window.lookupCode(q) : [];
@@ -7372,21 +7448,30 @@ var CHANNEL_STATIC = {
       window.renderCodeCards(codeBox, codeHits, codeDb);
       codeBox.hidden = false;
       hideError();
-      if(!codeDb){ resultsEl.hidden = true; resultsEl.classList.remove('show'); return; }
+      if(!codeDb){ resultsEl.hidden = true; resultsEl.classList.remove('show'); if(window.__brandTools){ window.__brandTools.linkFor(String(codeHits[0].zh).replace(/（.*?）/g, '')); } return; }
       q = codeDb;
     } else {
       codeBox.hidden = true;
-      var P = window.__pick;
+      // 本地成分知識：保養品（pick.js）、保健食品（pick-sup.js）
+      var local = function(text, exact){
+        var srcs = currentCategory === 'supplement' ? [window.__sup, window.__pick] : [window.__pick, window.__sup];
+        for(var i = 0; i < srcs.length; i++){
+          var R = srcs[i]; if(!R){ continue; }
+          var ing = exact ? R.matchExact(text) : R.match(text);
+          if(ing && !(ing.kind === 'ex' && !exact)){ return { ing: ing, R: R }; }
+        }
+        return null;
+      };
       var exactName = ALL_ITEMS[q] ? q : (EN_ALIAS[q.toLowerCase()] || '');
       if(!exactName){
-        var pe = P ? P.matchExact(q) : null;
-        if(pe && ALL_ITEMS[pe.k]){ q = pe.k; }
+        var pe = local(q, true);
+        if(pe && ALL_ITEMS[pe.ing.k]){ q = pe.ing.k; }
         else if(pe){ showPickInfo(pe, q); return; }
         else if(!findMatch(q)){
           var sr = window.__ingSearch ? window.__ingSearch.search(q, 1)[0] : null;
           if(sr && sr.score <= 2){ textInput.value = sr.go; runQuery(); return; }
-          var pm = P ? P.match(q) : null;
-          if(pm && ALL_ITEMS[pm.k]){ q = pm.k; }
+          var pm = local(q, false);
+          if(pm && ALL_ITEMS[pm.ing.k]){ q = pm.ing.k; }
           else if(pm){ showPickInfo(pm, q); return; }
         }
       }
@@ -7430,6 +7515,7 @@ var CHANNEL_STATIC = {
     resultsEl.hidden = false;
     requestAnimationFrame(function(){ resultsEl.classList.add('show'); });
     addToHistory('ingredient', cat, matchName);
+    if(window.__brandTools){ window.__brandTools.linkFor(matchName); }
   }
 
   document.querySelectorAll('.cat-tab').forEach(function(tab){ tab.addEventListener('click', function(){ selectCategory(tab.dataset.cat); }); });
@@ -7459,7 +7545,9 @@ var CHANNEL_STATIC = {
 </script>
 <script src="codes.js"></script>
 <script src="pick.js"></script>
+<script src="pick-sup.js"></script>
 <script src="search.js"></script>
+<script src="brand-tools.js"></script>
 <script>
   // 「依成分查詢」打字建議：中文、英文開頭、研究簡稱
   (function(){

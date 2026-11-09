@@ -122,12 +122,12 @@
     {k:'DMDM乙內醯脲', a:['dmdm乙內醯脲','dmdmhydantoin','咪唑烷基脲','imidazolidinylurea','重氮咪唑烷基脲','diazolidinylurea'], warn:{sensitive:'會釋放微量甲醛，敏感肌避開'}, flag:'preservative', n:'甲醛釋放型防腐劑'},
     {k:'氯苯甘醚', a:['氯苯甘醚','chlorphenesin'], n:'防腐劑'},
     {k:'月桂醇硫酸酯鈉', a:['月桂醇硫酸酯鈉','月桂基硫酸鈉','sls','sodiumlaurylsulfate'], warn:{dry:'清潔力強，會帶走油脂',sensitive:'刺激性高'}, n:'強力清潔劑，出現在乳液裡不常見'},
-    {k:'色素', a:['色素','ci','ci15985','ci19140','ci42090','ci14700','ci17200','ci16035','red40','yellow5','blue1'], warn:{sensitive:'色料可能引起過敏'}, flag:'cosmetic_dye', n:'讓顏色好看，對皮膚沒有幫助'}
+    {k:'色素', a:['色素','著色劑','ci','ci15985','ci19140','ci42090','ci14700','ci17200','ci16035','red40','yellow5','blue1'], warn:{sensitive:'色料可能引起過敏'}, flag:'cosmetic_dye', n:'讓顏色好看，對皮膚沒有幫助'}
   ];
 
   var GOALS = ['保濕','修護','美白','抗老','控油','舒緩','去角質','防曬'];
   var SKIN = [{v:'dry',t:'乾性'},{v:'normal',t:'中性'},{v:'combo',t:'混合性'},{v:'oily',t:'油性'}];
-  var TYPES = ['乳液','乳霜','化妝水','精華液','凝露','防曬乳'];
+  var TYPES = ['乳液','乳霜','化妝水','精華液','凝露','防曬乳','其他（彩妝等）'];
   var FLAG_TEXT = { fragrance:'香料', alcohol:'酒精', acids:'酸類／A 醇', oil:'植物精油', preservative:'特定防腐劑', cosmetic_dye:'色素', rosacea_general:'酒精、薄荷、酸類' };
 
   /* ---------- 小工具 ---------- */
@@ -557,5 +557,15 @@
     for(var j = 0; j < ALIAS.length; j++){ if(ALIAS[j].n === t){ return PICK_INGS[ALIAS[j].i]; } }
     return null;
   }
-  window.__pick = { match: match, matchExact: matchExact, suggest: suggestFor, renderInfo: renderInfo, ings: PICK_INGS, evaluate: evaluate, setProfile: function(p){ profile = p; } };
+  function addToCompare(name, type, tokens){
+    if(saved.length >= 3){ return false; }
+    saved.push({ name: name || ('第 ' + (saved.length + 1) + ' 瓶'), type: TYPES.indexOf(type) !== -1 ? type : TYPES[0], tokens: tokens.slice(), at: Date.now() });
+    store('mm_pick_saved', saved);
+    renderCompare(); if(lastResult){ renderResult(); }
+    return true;
+  }
+  window.__pick = { match: match, matchExact: matchExact, suggest: suggestFor, renderInfo: renderInfo, ings: PICK_INGS, evaluate: evaluate,
+    add: addToCompare, savedCount: function(){ return saved.length; },
+    hasProfile: function(){ return !!profile.skin; }, getProfile: function(){ return profile; },
+    setProfile: function(p){ profile = p; }, TYPES: TYPES };
 })();
