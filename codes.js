@@ -287,7 +287,7 @@
       box.appendChild(mk('div', 'code-detail-use', '用途：' + e.use));
       box.appendChild(mk('p', 'code-detail-note', e.n));
     }
-    box.appendChild(mk('div', 'code-detail-en mono', e.en));
+    if(!(opts && opts.noEn)){ box.appendChild(mk('div', 'code-detail-en mono', e.en)); }
     if(e.w){ box.appendChild(mk('p', 'code-warn', '⚠️ ' + e.w)); }
     box.appendChild(mk('div', 'code-detail-where', '常見於：' + whereText(e)));
     return box;
@@ -344,7 +344,9 @@
       row.setAttribute('role', 'button');
       row.tabIndex = 0;
       row.appendChild(mk('div', 'code-row-code mono', e.c));
-      row.appendChild(mk('div', 'code-row-name', e.zh));
+      var nm = mk('div', 'code-row-name', e.zh);
+      nm.appendChild(mk('span', 'code-row-en', e.en));   // 名稱後面加英文
+      row.appendChild(nm);
       row.appendChild(mk('div', 'code-row-use', e.use));
       row.appendChild(mk('div', 'code-row-note', e.n));
       function toggle(){
@@ -353,7 +355,7 @@
         if(open){ return; }
         row.classList.add('open');
         var more = mk('div', 'code-row-more');
-        more.appendChild(codeDetail(e));
+        more.appendChild(codeDetail(e, { noEn:true }));
         if(e.db && typeof window.__ingQuery === 'function'){
           var b = mk('button', 'btn-link', '看「' + e.db + '」完整資料 →');
           b.type = 'button';
