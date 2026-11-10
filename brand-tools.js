@@ -147,6 +147,13 @@
       row.appendChild(btn);
       sec.appendChild(row);
     }
+    if(window.__quickPick){
+      var rv = mk('div', 'review-links in-card');
+      rv.appendChild(mk('span', 'fit-note', '⭐ 查評價：'));
+      var short = opts.brand ? opts.brand.split(' ')[0] : '';
+      window.__quickPick.reviewLinks((short && p.name.indexOf(short) === -1 ? short + ' ' : '') + p.name, cat).forEach(function(a){ a.addEventListener('click', function(ev){ ev.stopPropagation(); }); rv.appendChild(a); });
+      sec.appendChild(rv);
+    }
     bodyInner.insertBefore(sec, bodyInner.firstChild);
   }
 
@@ -252,5 +259,5 @@
   }
   if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', init); } else { init(); }
 
-  window.__brandTools = { productsWith: productsWith, keys: keys, decorate: decorate, linkFor: linkFor, openFinder: openFinder, runFinder: runFinder };
+  window.__brandTools = { guessType: guessType, productsWith: productsWith, keys: keys, decorate: decorate, linkFor: linkFor, openFinder: openFinder, runFinder: runFinder };
 })();

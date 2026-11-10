@@ -486,6 +486,20 @@ textarea.text-field{resize:vertical;min-height:110px;width:100%;}
 .ing-tag.hit{background:var(--accent);color:#fff;}
 .bi-head{font-weight:900;font-size:17px;margin:14px 0 4px;}
 .ing-products-link{margin-top:8px;}
+
+/* ===== 店內挑選：點選輸入、查評價 ===== */
+.qp-bar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 8px;}
+.qp-btn{flex:1 1 auto;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:9px 12px;font:inherit;font-size:15px;font-weight:700;cursor:pointer;}
+.qp-btn.on{border-color:var(--accent);color:var(--accent);background:rgba(224,92,53,0.06);}
+.qp-panel{background:var(--card-alt);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:0 0 10px;}
+.qp-row{display:grid;gap:4px;margin-bottom:8px;}
+.qp-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+@media (max-width:520px){ .qp-grid{grid-template-columns:1fr;} }
+.qp-select{width:100%;min-width:0;}
+.qp-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.qp-review{margin:0 0 10px;}
+.review-links{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-top:8px;}
+.review-links.in-card{margin-top:10px;}
 </style>
 </head>
 <body>
@@ -845,7 +859,7 @@ textarea.text-field{resize:vertical;min-height:110px;width:100%;}
       <p class="method-label">在店裡拿起保養品，把成分表打進來，依你的膚質直接告訴你適不適合，最多比較 3 瓶</p>
       <div class="pick-card" id="pick-profile"></div>
       <div class="pick-card">
-        <div class="pick-prof-head"><span class="pick-step">2</span><div class="pick-prof-title"><b>這瓶的成分</b><span class="pick-prof-sum">看包裝背面「全成分」，照順序打前 5～8 個就夠；中文、英文前幾個字母（nia）、研究簡稱（NAM、SA、TXA）都可以，會跳出選項</span></div></div>
+        <div class="pick-prof-head"><span class="pick-step">2</span><div class="pick-prof-title"><b>這瓶的成分</b><span class="pick-prof-sum">不想打字：用「點選常見成分」或「從品牌選商品」；要打字的話，照包裝背面「全成分」順序打前 5～8 個就夠，中文、英文前幾個字母（nia）、簡稱（NAM、TXA）都可以</span></div></div>
         <div class="adv-grid" style="margin:12px 0 10px;">
           <div class="adv-field"><label class="adv-label" for="pick-name">商品名稱（可不填）</label><input type="text" id="pick-name" class="text-field" placeholder="例如：A 牌修護乳液"></div>
           <div class="adv-field"><label class="adv-label" for="pick-type">種類</label><select id="pick-type"></select></div>
@@ -867,7 +881,7 @@ textarea.text-field{resize:vertical;min-height:110px;width:100%;}
         <p class="method-label">在店裡拿起保健食品，把成分和含量打進來，依你想補的方向和身體狀況告訴你適不適合，最多比較 3 罐</p>
         <div class="pick-card" id="sup-profile"></div>
         <div class="pick-card">
-          <div class="pick-prof-head"><span class="pick-step">2</span><div class="pick-prof-title"><b>這罐的成分</b><span class="pick-prof-sum">看包裝的「內容物」和「營養標示」：成分照順序打，有寫含量的一起打（EPA 400mg、維生素D3 1000IU、益生菌 100億）；英文、簡稱（EPA、rTG、LGG）都可以</span></div></div>
+          <div class="pick-prof-head"><span class="pick-step">2</span><div class="pick-prof-title"><b>這罐的成分</b><span class="pick-prof-sum">不想打字：用「點選常見成分」或「從品牌選商品」；要打字的話，照包裝「內容物」順序打，有寫含量的一起打（EPA 400mg、維生素D3 1000IU、益生菌 100億）</span></div></div>
           <div class="adv-grid" style="margin:12px 0 10px;">
             <div class="adv-field"><label class="adv-label" for="sup-name">商品名稱（可不填）</label><input type="text" id="sup-name" class="text-field" placeholder="例如：A 牌魚油"></div>
             <div class="adv-field"><label class="adv-label" for="sup-type">劑型</label><select id="sup-type"></select></div>
@@ -7549,6 +7563,7 @@ var CHANNEL_STATIC = {
 <script src="pick-sup.js"></script>
 <script src="search.js"></script>
 <script src="brand-tools.js"></script>
+<script src="quick-pick.js"></script>
 <script>
   // 「依成分查詢」打字建議：中文、英文開頭、研究簡稱
   (function(){
