@@ -37,7 +37,9 @@
   ];
 
   var CAT_OF = { skin: ['skincare','cosmetic'], sup: ['supplement'] };
+  window.__quickPick = { SKIN_GROUPS: SKIN_GROUPS, SUP_GROUPS: SUP_GROUPS, bump: {} };
 
+  function store(k, v){ try{ if(v === undefined){ return JSON.parse(localStorage.getItem(k) || 'null'); } localStorage.setItem(k, JSON.stringify(v)); }catch(e){ return null; } }
   function splitTokens(v){ return v.split(/[,，、;；\n\r]+/).map(function(s){ return s.trim(); }).filter(Boolean); }
 
   function setup(mode){
@@ -80,9 +82,18 @@
     var row1 = mk('div', 'qp-row');
     var lab = mk('label', 'adv-label', '類別'); lab.htmlFor = mode + '-qp-group';
     var sel = mk('select', 'text-field qp-select'); sel.id = mode + '-qp-group';
+    var favOpt = mk('option', null, '⭐ 我常找的'); favOpt.value = 'fav'; sel.appendChild(favOpt);
     groups.forEach(function(g, i){ var o = mk('option', null, g.title + '（' + g.items.length + '）'); o.value = i; sel.appendChild(o); });
     row1.appendChild(lab); row1.appendChild(sel);
     p1.appendChild(row1);
+    var favTools = mk('div', 'qp-fav-tools'); favTools.hidden = true;
+    var favIn = mk('input', 'text-field'); favIn.type = 'text'; favIn.placeholder = isSup ? '自己加，例：EPA' : '自己加，例：nia';
+    var favAdd = mk('button', 'btn btn-secondary', '＋ 加入'); favAdd.type = 'button';
+    var favEdit = mk('button', 'pick-link', '整理'); favEdit.type = 'button';
+    favTools.appendChild(favIn); favTools.appendChild(favAdd); favTools.appendChild(favEdit);
+    p1.appendChild(favTools);
+    var favMsg = mk('p', 'pick-hint'); favMsg.hidden = true;
+    p1.appendChild(favMsg);
     var chips = mk('div', 'qp-chips');
     p1.appendChild(chips);
     p1.appendChild(mk('p', 'pick-hint', isSup ? '點一下加入、再點一次取消。有寫含量的話，加入後在成分後面補上（例如：EPA 400mg）。' : '點一下加入、再點一次取消。照包裝上的順序點，判斷會比較準（排越前面含量越多）。'));
@@ -90,6 +101,43 @@
     function nm(s){ return String(s).toLowerCase().replace(/[\s　]/g, ''); }
     var allItems = [], firstOfK = {}, labelSet = {};
     groups.forEach(function(g){ g.items.forEach(function(it){ allItems.push(it); labelSet[nm(it.label)] = 1; if(!firstOfK[it.k]){ firstOfK[it.k] = it; } }); });
+
+    /* ⭐ 我常找的：保養品、保健食品分開記（存在這台裝置的瀏覽器） */
+    var FAV_KEY = 'mm_fav_' + mode;
+    var fav = store(FAV_KEY) || {};
+    var favEditing = false;
+    function labelFor(tok){
+      var t = String(tok).trim();
+      if(labelSet[nm(t)]){ return allItems.filter(function(it){ return nm(it.label) === nm(t); })[0].label; }
+      var ing = R() && R().match(t);
+      return ing && !ing.kind && !ing.base ? ing.k : '';
+    }
+    function bump(tok, pin){
+      var l = labelFor(tok);
+      if(!l){ return ''; }
+      var f = fav[l] || { n: 0, t: 0 };
+      f.n += pin ? 0 : 1; f.t = Date.now(); if(pin){ f.pin = 1; }
+      fav[l] = f;
+      store(FAV_KEY, fav);
+      return l;
+    }
+    function favItems(){
+      return Object.keys(fav).filter(function(l){ var ing = R().match(l); return !!ing; })
+        .sort(function(a, b){ return (fav[b].pin || 0) - (fav[a].pin || 0) || fav[b].n - fav[a].n || fav[b].t - fav[a].t; })
+        .slice(0, 24).map(function(l){ return { label: l, k: R().match(l).k, fav: fav[l] }; });
+    }
+    function syncFavOpt(){ var n = favItems().length; favOpt.textContent = '⭐ 我常找的' + (n ? '（' + n + '）' : ''); }
+    favAdd.addEventListener('click', function(){
+      var added = [];
+      splitTokens(favIn.value).forEach(function(t){ var l = bump(t, true); if(l){ added.push(l); } });
+      favMsg.hidden = false;
+      favMsg.textContent = added.length ? '已加入：' + added.join('、') : '認不得這個成分，換個寫法試試（中文、英文、簡稱都可以）。';
+      if(added.length){ favIn.value = ''; }
+      syncFavOpt(); renderChips();
+    });
+    favIn.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); favAdd.click(); } });
+    favEdit.addEventListener('click', function(){ favEditing = !favEditing; favEdit.textContent = favEditing ? '完成' : '整理'; renderChips(); });
+    window.__quickPick.bump[mode] = bump;
     /* 按鈕亮起：成分欄裡有完全一樣的字；或是打了別的寫法（例如 glycerin）時，亮同成分的第一個按鈕 */
     function chosen(){
       var r = R(), exact = {}, kOnly = {};
@@ -103,11 +151,31 @@
     function renderChips(){
       if(p1.hidden){ return; }
       chips.textContent = '';
-      var g = groups[+sel.value] || groups[0];
+      var isFav = sel.value === 'fav';
+      favTools.hidden = !isFav;
+      if(!isFav){ favMsg.hidden = true; favEditing = false; favEdit.textContent = '整理'; }
+      syncFavOpt();
+      var g = isFav ? { items: favItems() } : (groups[+sel.value] || groups[0]);
+      if(isFav && !g.items.length){
+        chips.appendChild(mk('p', 'pick-hint', '還沒有紀錄。你點過的成分、在店內挑選判斷過的、在「依成分查詢」查過的，會自動出現在這裡（' + (isSup ? '保健食品' : '保養品') + '另外記）；也可以用上面的欄位自己加。'));
+        return;
+      }
+      if(isFav && favEditing){
+        g.items.forEach(function(it){
+          var b = mk('button', 'pick-chip qp-del', '✕ ' + it.label);
+          b.type = 'button';
+          b.addEventListener('click', function(){ delete fav[it.label]; store(FAV_KEY, fav); renderChips(); });
+          chips.appendChild(b);
+        });
+        var clr = mk('button', 'pick-link', '全部清掉'); clr.type = 'button';
+        clr.addEventListener('click', function(){ fav = {}; store(FAV_KEY, fav); renderChips(); });
+        chips.appendChild(clr);
+        return;
+      }
       var st = chosen();
       g.items.forEach(function(it){
-        var active = !!st.exact[nm(it.label)] || (!!st.kOnly[it.k] && firstOfK[it.k] === it);
-        var b = mk('button', 'pick-chip' + (active ? ' on' : ''), (active ? '✓ ' : '') + it.label);
+        var active = !!st.exact[nm(it.label)] || (!!st.kOnly[it.k] && (isFav ? !labelSet[nm(it.label)] || firstOfK[it.k] === it : firstOfK[it.k] === it));
+        var b = mk('button', 'pick-chip' + (active ? ' on' : ''), (active ? '✓ ' : '') + (isFav && it.fav.pin ? '📌 ' : '') + it.label);
         b.type = 'button';
         b.setAttribute('aria-pressed', String(active));
         b.addEventListener('click', function(){
@@ -121,6 +189,7 @@
             });
           } else {
             toks.push(it.label);
+            bump(it.label);
           }
           input.value = toks.length ? toks.join('、') + '、' : '';
           input.dispatchEvent(new Event('input'));
@@ -129,6 +198,10 @@
       });
     }
     input.addEventListener('input', renderChips);
+    // 按「看適不適合我」時，把認得的成分記進「我常找的」
+    var runBtn = $(isSup ? 'sup-btn' : 'pick-btn');
+    if(runBtn){ runBtn.addEventListener('click', function(){ var seen = {}; splitTokens(input.value).forEach(function(t){ var l = labelFor(t); if(l && !seen[l]){ seen[l] = 1; bump(t); } }); }); }
+    if(favItems().length){ sel.value = 'fav'; }
 
     /* --- 2. 從品牌選商品 --- */
     var B = window.BRAND_STATIC || {};
@@ -207,8 +280,26 @@
     });
   }
 
-  function init(){ setup('skin'); setup('sup'); }
+  function init(){
+    setup('skin'); setup('sup');
+    // 「依成分查詢」查過的成分：保健食品分類記到保健食品、其他記到保養品
+    var ti = $('text-input');
+    function logSearch(){
+      setTimeout(function(){
+        var v = ti.value.trim(); if(!v){ return; }
+        var a = document.querySelector('.cat-tab.active');
+        var mode = a && a.dataset.cat === 'supplement' ? 'sup' : 'skin';
+        var f = window.__quickPick.bump[mode];
+        if(f){ f(v); }
+      }, 30);
+    }
+    var sb = $('search-btn');
+    if(sb){ sb.addEventListener('click', logSearch); }
+    if(ti){ ti.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ logSearch(); } }); }
+    var sug = $('ing-suggest');
+    if(sug){ sug.addEventListener('click', function(e){ if(e.target.closest('.ing-sug')){ logSearch(); } }); }
+  }
   if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', init); } else { init(); }
 
-  window.__quickPick = { reviewLinks: reviewLinks, SKIN_GROUPS: SKIN_GROUPS, SUP_GROUPS: SUP_GROUPS };
+  window.__quickPick.reviewLinks = reviewLinks;
 })();
