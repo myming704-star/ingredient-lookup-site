@@ -79,15 +79,30 @@
     b2.addEventListener('click', function(){ toggle(b2, p2, p1, b1); });
 
     /* --- 1. 點選常見成分 --- */
-    var row1 = mk('div', 'qp-row');
-    var lab = mk('label', 'adv-label', '類別'); lab.htmlFor = mode + '-qp-group';
-    var sel = mk('select', 'text-field qp-select'); sel.id = mode + '-qp-group';
-    var favOpt = mk('option', null, '⭐ 我常找的'); favOpt.value = 'fav'; sel.appendChild(favOpt);
-    groups.forEach(function(g, i){ var o = mk('option', null, g.title + '（' + g.items.length + '）'); o.value = i; sel.appendChild(o); });
-    row1.appendChild(lab); row1.appendChild(sel);
+    /* 類別用可左右滑的頁籤，一眼看到全部，點一下就換 */
+    var SHORT = { '常見基底（通常排最前面）':'基底', '美白淡斑':'美白', '控油抗痘':'控油抗痘', '舒緩修護':'舒緩', '去角質（酸類）':'酸類', '要小心的':'⚠️ 要小心',
+      '魚油／Omega-3':'魚油', '骨骼關節':'關節', '心血管・精神':'心血管・精神', '睡眠放鬆':'睡眠', '美容・女性':'美容・女性', '膠囊與添加物':'添加物' };
+    var row1 = mk('div', 'qp-tabs');
+    row1.id = mode + '-qp-tabs';
+    row1.setAttribute('role', 'tablist');
     p1.appendChild(row1);
+    var sel = { value: '0' };
+    function renderTabs(){
+      var keep = row1.scrollLeft;
+      row1.textContent = '';
+      var n = favItems().length;
+      [['fav', '⭐ 我常找的' + (n ? ' ' + n : '')]].concat(groups.map(function(g, i){ return [String(i), SHORT[g.title] || g.title]; })).forEach(function(o){
+        var on = sel.value === o[0];
+        var b = mk('button', 'qp-tab' + (on ? ' on' : ''), o[1]);
+        b.type = 'button'; b.dataset.g = o[0];
+        b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', String(on));
+        b.addEventListener('click', function(){ sel.value = o[0]; renderChips(); });
+        row1.appendChild(b);
+      });
+      row1.scrollLeft = keep;
+    }
     var favTools = mk('div', 'qp-fav-tools'); favTools.hidden = true;
-    var favIn = mk('input', 'text-field'); favIn.type = 'text'; favIn.placeholder = isSup ? '自己加，例：EPA' : '自己加，例：nia';
+    var favIn = mk('input', 'text-field'); favIn.type = 'text'; favIn.placeholder = '自己加成分';
     var favAdd = mk('button', 'btn btn-secondary', '＋ 加入'); favAdd.type = 'button';
     var favEdit = mk('button', 'pick-link', '整理'); favEdit.type = 'button';
     favTools.appendChild(favIn); favTools.appendChild(favAdd); favTools.appendChild(favEdit);
@@ -97,7 +112,6 @@
     var chips = mk('div', 'qp-chips');
     p1.appendChild(chips);
     p1.appendChild(mk('p', 'pick-hint', isSup ? '點一下加入、再點一次取消。有寫含量的話，加入後在成分後面補上（例如：EPA 400mg）。' : '點一下加入、再點一次取消。照包裝上的順序點，判斷會比較準（排越前面含量越多）。'));
-    sel.addEventListener('change', renderChips);
     function nm(s){ return String(s).toLowerCase().replace(/[\s　]/g, ''); }
     var allItems = [], firstOfK = {}, labelSet = {};
     groups.forEach(function(g){ g.items.forEach(function(it){ allItems.push(it); labelSet[nm(it.label)] = 1; if(!firstOfK[it.k]){ firstOfK[it.k] = it; } }); });
@@ -126,7 +140,7 @@
         .sort(function(a, b){ return (fav[b].pin || 0) - (fav[a].pin || 0) || fav[b].n - fav[a].n || fav[b].t - fav[a].t; })
         .slice(0, 24).map(function(l){ return { label: l, k: R().match(l).k, fav: fav[l] }; });
     }
-    function syncFavOpt(){ var n = favItems().length; favOpt.textContent = '⭐ 我常找的' + (n ? '（' + n + '）' : ''); }
+    function syncFavOpt(){ renderTabs(); }
     favAdd.addEventListener('click', function(){
       var added = [];
       splitTokens(favIn.value).forEach(function(t){ var l = bump(t, true); if(l){ added.push(l); } });
@@ -207,32 +221,54 @@
     var B = window.BRAND_STATIC || {};
     var brands = Object.keys(B).filter(function(n){ return CAT_OF[mode].indexOf(B[n].category) !== -1; })
       .sort(function(a, b){ return a.localeCompare(b, 'zh-Hant'); });
-    var row2 = mk('div', 'qp-grid');
-    var f1 = mk('div', 'adv-field'); var l1 = mk('label', 'adv-label', '品牌（' + brands.length + ' 個）'); l1.htmlFor = mode + '-qp-brand';
-    var sb = mk('select', 'text-field qp-select'); sb.id = mode + '-qp-brand';
-    sb.appendChild(mk('option', null, '選品牌…')).value = '';
-    brands.forEach(function(n){ var o = mk('option', null, n); o.value = n; sb.appendChild(o); });
-    f1.appendChild(l1); f1.appendChild(sb);
-    var f2 = mk('div', 'adv-field'); var l2 = mk('label', 'adv-label', '商品'); l2.htmlFor = mode + '-qp-prod';
-    var sp = mk('select', 'text-field qp-select'); sp.id = mode + '-qp-prod'; sp.disabled = true;
-    sp.appendChild(mk('option', null, '先選品牌')).value = '';
-    f2.appendChild(l2); f2.appendChild(sp);
-    row2.appendChild(f1); row2.appendChild(f2);
-    p2.appendChild(row2);
-    var note = mk('p', 'pick-hint', '資料庫每個商品只記錄 2～3 個主要成分；帶入後可以再照包裝補上其他成分，判斷會更準。找不到的商品就用「點選常見成分」。');
-    p2.appendChild(note);
-    sb.addEventListener('change', function(){
-      sp.textContent = '';
-      var e = B[sb.value];
-      if(!e){ sp.appendChild(mk('option', null, '先選品牌')).value = ''; sp.disabled = true; return; }
-      sp.appendChild(mk('option', null, '選商品…（' + e.products.length + ' 個）')).value = '';
-      e.products.forEach(function(p, i){ var o = mk('option', null, p.name + (p.subcatTag ? '｜' + p.subcatTag : '')); o.value = i; sp.appendChild(o); });
-      sp.disabled = false;
+    /* 打品牌或商品的一部分就跳出商品（品牌、商品名、分類、主要成分都會比對），不用捲長長的選單 */
+    function sn(s){ return String(s).toLowerCase().replace(/[！-～]/g, function(ch){ return String.fromCharCode(ch.charCodeAt(0) - 0xFEE0); }).replace(/[\s.\-_'’·・&]/g, '').replace(/維他命/g, '維生素'); }
+    var PRODS = [];
+    brands.forEach(function(bn){
+      B[bn].products.forEach(function(p, i){
+        PRODS.push({ brand: bn, i: i, p: p, nameKey: sn(p.name), hay: sn(bn + ' ' + p.name + ' ' + (p.subcatTag || '') + ' ' + (p.ingredients || []).join(' ')) });
+      });
     });
-    sp.addEventListener('change', function(){
-      var e = B[sb.value], p = e && e.products[+sp.value];
+    var ps = mk('input', 'text-field'); ps.type = 'search'; ps.id = mode + '-qp-prod-search';
+    ps.placeholder = isSup ? '打品牌或商品，例：SUNLIFE 魚油' : '打品牌或商品，例：理膚 B5';
+    ps.setAttribute('aria-label', '搜尋品牌或商品');
+    p2.appendChild(ps);
+    var plist = mk('div', 'qp-prod-list');
+    p2.appendChild(plist);
+    var note = mk('p', 'pick-hint', '資料庫有 ' + brands.length + ' 個品牌、' + PRODS.length + ' 個商品，每個只記錄 2～3 個主要成分；帶入後可以再照包裝補上其他成分。找不到的商品就用「點選常見成分」。');
+    p2.appendChild(note);
+    var RECENT_KEY = 'mm_recent_prod_' + mode;
+    function prodButton(x){
+      var b = mk('button', 'qp-prod');
+      b.type = 'button';
+      b.appendChild(mk('b', null, x.p.name));
+      b.appendChild(mk('span', null, x.brand.split(' ')[0] + (x.p.subcatTag ? '・' + x.p.subcatTag : '')));
+      b.addEventListener('click', function(){ choose(x.brand, x.i); });
+      return b;
+    }
+    function renderProds(){
+      plist.textContent = '';
+      var terms = ps.value.trim().split(/\s+/).map(sn).filter(Boolean);
+      if(!terms.length){
+        var rec = (store(RECENT_KEY) || []).map(function(r){ return PRODS.filter(function(x){ return x.brand === r.b && x.i === r.i; })[0]; }).filter(Boolean);
+        if(rec.length){ plist.appendChild(mk('p', 'adv-label', '最近選過')); rec.forEach(function(x){ plist.appendChild(prodButton(x)); }); }
+        return;
+      }
+      var hits = PRODS.filter(function(x){ return terms.every(function(t){ return x.hay.indexOf(t) !== -1; }); })
+        .map(function(x){ return { x: x, s: terms.filter(function(t){ return x.nameKey.indexOf(t) !== -1; }).length }; })
+        .sort(function(a, b){ return b.s - a.s; });
+      if(!hits.length){ plist.appendChild(mk('p', 'pick-hint', '找不到。可以只打品牌（例如「理膚」）或商品類型（例如「乳液」「魚油」）。')); return; }
+      hits.slice(0, 12).forEach(function(h){ plist.appendChild(prodButton(h.x)); });
+      if(hits.length > 12){ plist.appendChild(mk('p', 'pick-hint', '共 ' + hits.length + ' 個，多打一個字縮小範圍（例如再加「乳液」）。')); }
+    }
+    ps.addEventListener('input', renderProds);
+    b2.addEventListener('click', function(){ if(!p2.hidden){ renderProds(); setTimeout(function(){ ps.focus(); }, 0); } });
+    function choose(brandName, idx){
+      var e = B[brandName], p = e && e.products[idx];
       if(!p){ return; }
-      var short = sb.value.split(' ')[0];
+      var rec = (store(RECENT_KEY) || []).filter(function(r){ return !(r.b === brandName && r.i === idx); });
+      rec.unshift({ b: brandName, i: idx }); store(RECENT_KEY, rec.slice(0, 6));
+      var short = brandName.split(' ')[0];
       nameEl.value = (p.name.indexOf(short) === -1 ? short + ' ' : '') + p.name;
       input.value = (p.ingredients || []).join('、') + '、';
       if(typeEl && window.__brandTools && window.__brandTools.guessType){
@@ -242,8 +278,9 @@
       input.dispatchEvent(new Event('input'));
       nameEl.dispatchEvent(new Event('input'));
       p2.hidden = true; b2.classList.remove('on');
+      ps.value = '';
       input.focus();
-    });
+    }
 
     /* --- 3. 查評價 --- */
     var rv = mk('div', 'qp-review');
