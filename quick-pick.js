@@ -40,7 +40,7 @@
   window.__quickPick = { SKIN_GROUPS: SKIN_GROUPS, SUP_GROUPS: SUP_GROUPS, bump: {} };
 
   function store(k, v){ try{ if(v === undefined){ return JSON.parse(localStorage.getItem(k) || 'null'); } localStorage.setItem(k, JSON.stringify(v)); }catch(e){ return null; } }
-  function splitTokens(v){ return v.split(/[,，、;；\n\r]+/).map(function(s){ return s.trim(); }).filter(Boolean); }
+  function splitTokens(v){ return v.replace(/(\d)\s*[,，]\s*(?=\d)/g, '$1\u201A').split(/[,，、;；\n\r]+/).map(function(s){ return s.replace(/\u201A/g, ',').trim(); }).filter(Boolean); }
 
   function setup(mode){
     var isSup = mode === 'sup';

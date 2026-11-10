@@ -137,6 +137,39 @@
   function norm(s){ return String(s).toLowerCase().replace(/[\s　·・．。\.'"’()（）\[\]【】]/g, '').replace(/[ⅰ-ⅻ]/g, ''); }
 
   var ALIAS = [];
+
+  /* 2026-11-10 補：全成分表裡常見、原本認不得的輔料（多數是中性，不影響判斷） */
+  [
+    {k:'磷酸鹽', a:['磷酸鉀','磷酸二鉀','磷酸二氫鉀','磷酸鈉','磷酸二氫鈉','磷酸氫二鈉','potassium phosphate','dipotassium phosphate','sodium phosphate','disodium phosphate'], n:'緩衝劑，讓酸鹼度穩定', base:1},
+    {k:'山嵛基三甲基銨甲基硫酸鹽', a:['山嵛基三甲基銨甲基硫酸鹽','山崳基三甲基銨甲基硫酸鹽','behentrimonium methosulfate'], n:'讓質地柔順的乳化成分（護髮也常見）', base:1},
+    {k:'溫和乳化劑', a:['月桂醯乳酸鈉','sodium lauroyl lactylate','硬脂醯麩胺酸鈉','sodium stearoyl glutamate','鯨蠟硬脂基葡糖苷','cetearyl glucoside','鯨蠟硬脂醇聚醚-20','ceteareth-20','月桂醇聚醚-9','laureth-9','peg-100硬脂酸酯','peg-100 stearate','peg-40氫化蓖麻油','peg-40 hydrogenated castor oil','peg-60氫化蓖麻油','聚山梨醇酯-20','聚山梨醇酯-60','聚山梨醇酯-80','polysorbate 20','polysorbate 60','polysorbate 80','聚山梨醇酯'], n:'讓油和水混在一起的乳化劑，用量少', base:1},
+    {k:'EDTA（螯合劑）', a:['乙二胺四乙酸二鈉','乙二胺四乙酸四鈉','乙二胺四乙酸','disodium edta','tetrasodium edta','edta'], n:'抓住水裡的金屬離子，讓配方穩定不變質', base:1},
+    {k:'精胺酸', a:['精胺酸','l-精胺酸','arginine'], n:'胺基酸，用來調整酸鹼，也有保濕效果', base:1},
+    {k:'氫氧化鋁', a:['氫氧化鋁','aluminum hydroxide','aluminium hydroxide'], n:'包覆防曬粉體，讓質地穩定', base:1},
+    {k:'硬脂酸', a:['硬脂酸','stearic acid'], n:'乳化、增稠用的脂肪酸', base:1},
+    {k:'二氧化矽', a:['二氧化矽','矽石','水合矽石','silica','hydrated silica','silicon dioxide'], n:'吸油、讓質地滑順的粉體', base:1},
+    {k:'三乙氧基辛基矽烷', a:['三乙氧基辛基矽烷','triethoxycaprylylsilane'], n:'包覆粉體，讓防曬、粉底不結塊', base:1},
+    {k:'氯化鈉', a:['氯化鈉','sodium chloride'], n:'鹽，用來調整稠度', base:1},
+    {k:'維生素E', a:['生育醇','d-α-生育醇','混合生育醇','tocopherols']},
+    {k:'聚二甲基矽氧烷', a:['二甲基矽氧烷','dimethicone crosspolymer']},
+    {k:'增稠成膜高分子', a:['丙烯酸酯類共聚物','acrylates copolymer','丙烯酸(酯)類/c10-30烷醇丙烯酸酯交聯聚合物','acrylates/c10-30 alkyl acrylate crosspolymer','丙烯醯二甲基牛磺酸銨/vp共聚物','ammonium acryloyldimethyltaurate/vp copolymer','聚丙烯酸酯交聯聚合物-6','polyacrylate crosspolymer-6','羥乙基纖維素','hydroxyethylcellulose','聚乙烯醇','polyvinyl alcohol','麥芽糊精','maltodextrin'], n:'讓質地變稠或在皮膚上成膜的成分', base:1},
+    {k:'氫化卵磷脂', a:['氫化卵磷脂','hydrogenated lecithin'], n:'乳化、幫助修護屏障的磷脂', base:1},
+    {k:'酸鹼調整劑', a:['檸檬酸','檸檬酸鈉','citric acid','sodium citrate','氫氧化鈉','sodium hydroxide','氫氧化鉀','potassium hydroxide','氨甲基丙醇','aminomethyl propanol'], n:'調整酸鹼度；在配方裡已經中和，不會刺激', base:1},
+    {k:'辛甘醇', a:['辛甘醇','caprylyl glycol','甘油辛酸酯','glyceryl caprylate'], n:'保濕，也幫助防腐', base:1},
+    {k:'溫和防腐劑', a:['苯甲酸鈉','sodium benzoate','山梨酸鉀','己二烯酸鉀','potassium sorbate'], n:'溫和、常見的防腐劑', base:1},
+    {k:'清爽潤膚油', a:['異十六烷','isohexadecane','氫化聚異丁烯','hydrogenated polyisobutene','異壬酸異壬酯','isononyl isononanoate'], n:'清爽不黏的潤膚油', base:1},
+    {k:'鯨蠟醇乙基己酸酯', a:['鯨蠟醇乙基己酸酯','cetyl ethylhexanoate'], n:'讓質地滑順的潤膚油', warn:{acne:'致粉刺性中等，痘痘肌留意'}},
+    {k:'甘露醇', a:['甘露醇','mannitol'], g:['保濕'], n:'保濕成分'},
+    {k:'乳酸鈉', a:['乳酸鈉','sodium lactate'], g:['保濕'], fit:['dry'], n:'天然保濕因子之一，不是去角質的酸'},
+    {k:'甘油聚醚-26', a:['甘油聚醚-26','glycereth-26'], g:['保濕'], n:'清爽的保濕成分'},
+    {k:'礦物粉體', a:['滑石粉','talc','雲母','mica','氧化鐵','iron oxides','氧化鐵紅','氧化鐵黃','氧化鐵黑'], n:'彩妝常見的粉體、礦物色料，刺激性低', base:1},
+    {k:'溫和清潔劑', a:['椰油醯兩性基乙酸鈉','sodium cocoamphoacetate','月桂醯肌胺酸鈉','sodium lauroyl sarcosinate','椰油醯基羥乙磺酸鈉','sodium cocoyl isethionate','椰油醯甘胺酸鉀','potassium cocoyl glycinate','椰油基葡糖苷','coco-glucoside','癸基葡糖苷','decyl glucoside'], n:'比較溫和的清潔起泡成分', base:1},
+    {k:'椰油醯胺丙基甜菜鹼', a:['椰油醯胺丙基甜菜鹼','cocamidopropyl betaine'], n:'溫和的清潔起泡成分（跟保濕的甜菜鹼不同）', warn:{sensitive:'少數人會過敏'}}
+  ].forEach(function(x){
+    var ex = null;
+    for(var i = 0; i < PICK_INGS.length; i++){ if(PICK_INGS[i].k === x.k){ ex = PICK_INGS[i]; break; } }
+    if(ex){ ex.a = ex.a.concat(x.a); } else { PICK_INGS.push(x); }
+  });
   PICK_INGS.forEach(function(ing, i){ ing.a.forEach(function(a){ ALIAS.push({ n: norm(a), i: i, raw: a }); }); });
   // 研究簡稱與代號（NAM、SA、TXA、CI 77891…，資料在 codes.js）也當成別名
   (window.INGREDIENT_CODES || []).forEach(function(c){
@@ -185,7 +218,9 @@
     return CODE_ING[c.c];
   }
   function splitTokens(raw){
-    return raw.split(/[,，、;；\n\r\/／]+/).map(function(s){ return s.trim(); }).filter(function(s){ return s; });
+    // 「1,2-己二醇」這種數字中間的逗號不切；「/」也不切（Caprylic/Capric Triglyceride 是同一個成分）
+    return raw.replace(/(\d)\s*[,，]\s*(?=\d)/g, '$1\u201A').split(/[,，、;；\n\r]+/)
+      .map(function(s){ return s.replace(/\u201A/g, ',').trim(); }).filter(function(s){ return s; });
   }
 
   /* ---------- 狀態 ---------- */
